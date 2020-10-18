@@ -1,2 +1,2 @@
 portion
-rtree
+rtree == 0.9.4

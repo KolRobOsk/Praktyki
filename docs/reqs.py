@@ -1,2 +1,2 @@
-install portion
-install rtree
+portion
+rtree

@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cut &#8212; Pudełka 3D 1.0 - dokumentacja</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Kod źródłowy modułu cut</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">portion</span>
+
+<span class="c1">#klasa przechowująca instrukcje dot. pudełek</span>
+<div class="viewcode-block" id="box3D"><a class="viewcode-back" href="../cut.html#cut.box3D">[dokumentacja]</a><span class="k">class</span> <span class="nc">box3D</span><span class="p">:</span>
+
+    <span class="c1">#inicjalizacja z interwałami x, y, z</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval_x</span><span class="p">,</span> <span class="n">interval_y</span><span class="p">,</span> <span class="n">interval_z</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval_x</span> <span class="o">=</span> <span class="n">interval_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval_y</span> <span class="o">=</span> <span class="n">interval_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval_z</span> <span class="o">=</span> <span class="n">interval_z</span>
+
+    <span class="c1">#funkcje get dla każdego z interwałów</span>
+<div class="viewcode-block" id="box3D.get_interval_x"><a class="viewcode-back" href="../cut.html#cut.box3D.get_interval_x">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">get_interval_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_x</span></div>
+
+<div class="viewcode-block" id="box3D.get_interval_y"><a class="viewcode-back" href="../cut.html#cut.box3D.get_interval_y">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">get_interval_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_y</span></div>
+
+<div class="viewcode-block" id="box3D.get_interval_z"><a class="viewcode-back" href="../cut.html#cut.box3D.get_interval_z">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">get_interval_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_z</span></div>
+
+    <span class="c1">#funkcja sprawdzająca czy punkt jest w pudełku</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_z</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="c1">#funkcja sprawdzająca czy punkt jest na granicy pudełek</span>
+    <span class="k">def</span> <span class="fm">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">is_on_border</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">interval_x</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_x</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">interval_y</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_y</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span> <span class="ow">or</span> <span class="n">z</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">interval_z</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_z</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span>
+        <span class="n">is_inside_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">is_on_border</span> <span class="o">&amp;</span> <span class="n">is_inside_box</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="c1">#metoda statyczna tworząca pudełko na podstawie interwałów</span>
+    <span class="c1">#podanych w kolejności wszystkie lower, potem wszystkie upper</span>
+<div class="viewcode-block" id="box3D.factory"><a class="viewcode-back" href="../cut.html#cut.box3D.factory">[dokumentacja]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">factory</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">box3D</span><span class="p">(</span><span class="n">portion</span><span class="o">.</span><span class="n">closed</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">portion</span><span class="o">.</span><span class="n">closed</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">portion</span><span class="o">.</span><span class="n">closed</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">))</span></div></div>
+
+<span class="c1">#funkcja tworząca interwał zastępująca oryginalny closed</span>
+<div class="viewcode-block" id="my_closed"><a class="viewcode-back" href="../cut.html#cut.my_closed">[dokumentacja]</a><span class="k">def</span> <span class="nf">my_closed</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">myInterval</span><span class="o">.</span><span class="n">from_atomic</span><span class="p">(</span><span class="n">portion</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">Bound</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">portion</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">Bound</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">)</span></div>
+
+<span class="c1">#rozszerzona funkcja dziedzicząca z funkcji interwał</span>
+<div class="viewcode-block" id="myInterval"><a class="viewcode-back" href="../cut.html#cut.myInterval">[dokumentacja]</a><span class="k">class</span> <span class="nc">myInterval</span><span class="p">(</span><span class="n">portion</span><span class="o">.</span><span class="n">Interval</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    epsilon - liczba potrzebna do przycięcia pudełek,</span>
+<span class="sd">    bez tego są liczone jako przecinające się nawet jak</span>
+<span class="sd">    tylko nachodzą na siebie granicami</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-7</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    funkcje deklarujące, gettery i settery</span>
+<span class="sd">    granic interwałów</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">upper_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">upper_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+
+    <span class="nd">@lower_eps</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">lower_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@lower_meps</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">lower_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_meps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@upper_eps</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">upper_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+    <span class="nd">@upper_meps</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">upper_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_meps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span>
+
+
+    <span class="nd">@lower_eps</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">get_lower_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_eps</span>
+
+    <span class="nd">@lower_meps</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">get_lower_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_meps</span>
+
+    <span class="nd">@upper_eps</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">get_upper_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_eps</span>
+
+    <span class="nd">@upper_meps</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">get_upper_meps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_meps</span>
+
+    <span class="c1">#funkcja która przycina 1 interwał</span>
+<div class="viewcode-block" id="myInterval.box_cut_execute"><a class="viewcode-back" href="../cut.html#cut.myInterval.box_cut_execute">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">box_cut_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+        <span class="n">myInt</span> <span class="o">=</span> <span class="n">myInterval</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">my_closed</span><span class="p">(</span><span class="n">myInt</span><span class="o">.</span><span class="n">get_lower_eps</span><span class="p">,</span> <span class="n">myInt</span><span class="o">.</span><span class="n">get_upper_meps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interval</span></div>
+
+    <span class="c1">#funkcja przycinająca pudełko</span>
+<div class="viewcode-block" id="myInterval.box_cut"><a class="viewcode-back" href="../cut.html#cut.myInterval.box_cut">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">box_cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box1</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_cut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_cut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_y</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_cut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_z</span><span class="p">)</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">box3D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">box</span></div>
+
+    <span class="c1">#funkcja która cofa przycięcie 1 interwału</span>
+<div class="viewcode-block" id="myInterval.box_uncut_execute"><a class="viewcode-back" href="../cut.html#cut.myInterval.box_uncut_execute">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">box_uncut_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+        <span class="n">myInt</span> <span class="o">=</span> <span class="n">myInterval</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">my_closed</span><span class="p">(</span><span class="n">myInt</span><span class="o">.</span><span class="n">get_lower_meps</span><span class="p">,</span> <span class="n">myInt</span><span class="o">.</span><span class="n">get_upper_eps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interval</span></div>
+
+    <span class="c1">#funkcja cofająca przycięcie pudełka</span>
+<div class="viewcode-block" id="myInterval.box_uncut"><a class="viewcode-back" href="../cut.html#cut.myInterval.box_uncut">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">box_uncut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box1</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_uncut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_uncut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_y</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_uncut_execute</span><span class="p">(</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_z</span><span class="p">)</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">box3D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">box</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Kod modułu</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński, Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

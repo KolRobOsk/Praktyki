@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>signatures &#8212; Pudełka 3D 1.0 - dokumentacja</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Kod źródłowy modułu signatures</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">split</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="viewcode-block" id="signatures"><a class="viewcode-back" href="../signatures.html#signatures.signatures">[dokumentacja]</a><span class="k">class</span> <span class="nc">signatures</span><span class="p">:</span>
+
+    <span class="c1">#funkcje sprawdzające, jaką sygnaturę nadać danej parze interwałów</span>
+<div class="viewcode-block" id="signatures.io12"><a class="viewcode-back" href="../signatures.html#signatures.signatures.io12">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">io12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="n">len1</span><span class="p">,</span> <span class="n">len2</span> <span class="o">=</span> <span class="p">(</span><span class="n">mylen</span><span class="p">(</span><span class="n">interval1</span><span class="p">),</span> <span class="n">mylen</span><span class="p">(</span><span class="n">interval2</span><span class="p">))</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="n">len2</span> <span class="o">-</span> <span class="n">len1</span> <span class="k">if</span> <span class="n">len1</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">len1</span> <span class="o">+</span> <span class="n">len2</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">interval1</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">interval2</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_out</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)))</span><span class="o">|</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_half_out</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">difference</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="signatures.ii12"><a class="viewcode-back" href="../signatures.html#signatures.signatures.ii12">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">ii12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">interval1</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">interval2</span><span class="o">.</span><span class="n">upper</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="signatures.io21"><a class="viewcode-back" href="../signatures.html#signatures.signatures.io21">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">io21</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="n">len1</span><span class="p">,</span> <span class="n">len2</span> <span class="o">=</span> <span class="p">(</span><span class="n">mylen</span><span class="p">(</span><span class="n">interval1</span><span class="p">),</span> <span class="n">mylen</span><span class="p">(</span><span class="n">interval2</span><span class="p">))</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="n">len1</span> <span class="o">-</span> <span class="n">len2</span> <span class="k">if</span> <span class="n">len2</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">len1</span> <span class="o">+</span> <span class="n">len2</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">interval2</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">interval1</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_out</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_half_out</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">difference</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="signatures.ii21"><a class="viewcode-back" href="../signatures.html#signatures.signatures.ii21">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">ii21</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">interval1</span><span class="o">.</span><span class="n">upper</span> <span class="o">&gt;</span> <span class="n">interval2</span><span class="o">.</span><span class="n">upper</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+    <span class="c1">#funkcja zwracająca tablicę z trzema sygnaturami interwałów</span>
+<div class="viewcode-block" id="signatures.get_signatures_triple"><a class="viewcode-back" href="../signatures.html#signatures.signatures.get_signatures_triple">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">get_signatures_triple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box1</span><span class="p">,</span> <span class="n">box2</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">box1</span><span class="o">.</span><span class="n">interval_x</span><span class="p">,</span> <span class="n">box1</span><span class="o">.</span><span class="n">interval_y</span><span class="p">,</span> <span class="n">box1</span><span class="o">.</span><span class="n">interval_z</span><span class="p">,</span> <span class="n">box2</span><span class="o">.</span><span class="n">interval_x</span><span class="p">,</span> <span class="n">box2</span><span class="o">.</span><span class="n">interval_y</span><span class="p">,</span> <span class="n">box2</span><span class="o">.</span><span class="n">interval_z</span>
+        <span class="n">signatures</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_signature</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_signature</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_signature</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">signatures</span></div>
+
+    <span class="c1">#funkcja przygotowująca pudełka do posortowania interwałów</span>
+<div class="viewcode-block" id="signatures.sort_signatures"><a class="viewcode-back" href="../signatures.html#signatures.signatures.sort_signatures">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">sort_signatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box1</span><span class="p">,</span> <span class="n">box2</span><span class="p">,</span> <span class="n">in2sorted</span><span class="p">):</span>
+        <span class="n">box_tab1</span> <span class="o">=</span> <span class="p">[</span><span class="n">box1</span><span class="o">.</span><span class="n">interval_x</span><span class="p">,</span> <span class="n">box1</span><span class="o">.</span><span class="n">interval_y</span><span class="p">,</span> <span class="n">box1</span><span class="o">.</span><span class="n">interval_z</span><span class="p">]</span>
+        <span class="n">box_tab2</span> <span class="o">=</span> <span class="p">[</span><span class="n">box2</span><span class="o">.</span><span class="n">interval_x</span><span class="p">,</span> <span class="n">box2</span><span class="o">.</span><span class="n">interval_y</span><span class="p">,</span> <span class="n">box2</span><span class="o">.</span><span class="n">interval_z</span><span class="p">]</span>
+        <span class="n">tri_sign</span><span class="p">,</span> <span class="n">tri_sign_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permute_signatures</span><span class="p">(</span><span class="n">box_tab1</span><span class="p">,</span> <span class="n">in2sorted</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">permute_signatures</span><span class="p">(</span><span class="n">box_tab2</span><span class="p">,</span> <span class="n">in2sorted</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tri_sign</span><span class="p">,</span> <span class="n">tri_sign_i</span></div>
+
+    <span class="c1">#funkcja permutująca interwały z tablicy</span>
+<div class="viewcode-block" id="signatures.permute_signatures"><a class="viewcode-back" href="../signatures.html#signatures.signatures.permute_signatures">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">permute_signatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box_tab</span><span class="p">,</span> <span class="n">sort_order</span><span class="p">):</span>
+        <span class="n">box_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">box_tab</span><span class="p">,</span> <span class="n">sort_order</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">box_tab</span></div>
+
+    <span class="c1">#funkcja przeprowadzająca operację permutacji</span>
+<div class="viewcode-block" id="signatures.permute"><a class="viewcode-back" href="../signatures.html#signatures.signatures.permute">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">permute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sortin</span><span class="p">,</span> <span class="n">permutation</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sortin</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">sortin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">permutation</span><span class="p">]</span></div>
+
+    <span class="c1">#funkcja sortująca sygnatury interwałów</span>
+<div class="viewcode-block" id="signatures.my_sort"><a class="viewcode-back" href="../signatures.html#signatures.signatures.my_sort">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">my_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputlist</span><span class="p">):</span>
+        <span class="n">inputlist</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputlist</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inputlist</span><span class="p">)))</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">inputlist</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">sorted2in</span> <span class="o">=</span> <span class="p">[</span><span class="n">aux</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aux</span><span class="p">))]</span>
+        <span class="n">list2</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sorted2in</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted2in</span><span class="p">)))</span>
+        <span class="n">aux1</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">list2</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">in2sorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">aux1</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aux1</span><span class="p">))]</span>
+        <span class="n">sort</span> <span class="o">=</span> <span class="p">[</span><span class="n">aux</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aux</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="n">sort</span><span class="p">,</span> <span class="n">in2sorted</span><span class="p">,</span> <span class="n">sorted2in</span></div>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    funkcje sprawdzające czy interwały </span>
+<span class="sd">    są w danym stosunku do siebie</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="signatures.is_in"><a class="viewcode-back" href="../signatures.html#signatures.signatures.is_in">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">is_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="n">interval1</span> <span class="o">&amp;</span> <span class="n">interval2</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">((</span><span class="n">union</span><span class="o">.</span><span class="n">lower</span> <span class="o">==</span> <span class="n">interval1</span><span class="o">.</span><span class="n">lower</span> <span class="ow">and</span> <span class="n">union</span><span class="o">.</span><span class="n">upper</span> <span class="o">==</span> <span class="n">interval1</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">union</span><span class="o">.</span><span class="n">lower</span> <span class="o">==</span> <span class="n">interval2</span><span class="o">.</span><span class="n">lower</span> <span class="ow">and</span> <span class="n">union</span><span class="o">.</span><span class="n">upper</span> <span class="o">==</span> <span class="n">interval2</span><span class="o">.</span><span class="n">upper</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="signatures.is_equal"><a class="viewcode-back" href="../signatures.html#signatures.signatures.is_equal">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">is_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">interval1</span> <span class="o">==</span> <span class="n">interval2</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="signatures.is_out"><a class="viewcode-back" href="../signatures.html#signatures.signatures.is_out">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">is_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">interval1</span><span class="o">.</span><span class="n">lower</span> <span class="o">!=</span> <span class="n">interval2</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">interval2</span><span class="o">.</span><span class="n">upper</span> <span class="o">!=</span> <span class="n">interval1</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">interval1</span> <span class="o">&amp;</span> <span class="n">interval2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="signatures.is_separate"><a class="viewcode-back" href="../signatures.html#signatures.signatures.is_separate">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">is_separate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int1</span><span class="p">,</span> <span class="n">int2</span><span class="p">):</span>
+        <span class="n">intersect</span> <span class="o">=</span> <span class="n">int1</span> <span class="o">&amp;</span> <span class="n">int2</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">mylen</span><span class="p">(</span><span class="n">intersect</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="signatures.is_half_out"><a class="viewcode-back" href="../signatures.html#signatures.signatures.is_half_out">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">is_half_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int1</span><span class="p">,</span> <span class="n">int2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">int1</span><span class="o">.</span><span class="n">lower</span> <span class="o">==</span> <span class="n">int2</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">int2</span><span class="o">.</span><span class="n">upper</span> <span class="o">==</span> <span class="n">int1</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="signatures.ie"><a class="viewcode-back" href="../signatures.html#signatures.signatures.ie">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">ie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_equal</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+    <span class="c1">#funkcja nadająca sygnatury parom interwałów</span>
+<div class="viewcode-block" id="signatures.get_signature"><a class="viewcode-back" href="../signatures.html#signatures.signatures.get_signature">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">get_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ii12</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;ii12&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ii21</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;ii21&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">io12</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;io12&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">io21</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;io21&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ie</span><span class="p">(</span><span class="n">interval1</span><span class="p">,</span> <span class="n">interval2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;ii12&#39;</span></div>
+
+    <span class="c1">#funkcja przywracająca oryginalny porządek interwałów</span>
+<div class="viewcode-block" id="signatures.ret_original_order"><a class="viewcode-back" href="../signatures.html#signatures.signatures.ret_original_order">[dokumentacja]</a>    <span class="k">def</span> <span class="nf">ret_original_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split</span><span class="p">,</span> <span class="n">sorted2in</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">split</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">interval_x</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">interval_y</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">interval_z</span><span class="p">]</span>
+            <span class="n">perm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permute_signatures</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">sorted2in</span><span class="p">)</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box3D</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">table</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Kod modułu</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński, Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

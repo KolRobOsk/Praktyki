@@ -1,2 +1,2 @@
-python pip install portion
-python pip install rtree
+pip install portion
+pip install rtree

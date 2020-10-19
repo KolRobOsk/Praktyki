@@ -1,4 +1,4 @@
-spatialindex-src
-portion
 CMake
+spatialindex
+portion
 Rtree

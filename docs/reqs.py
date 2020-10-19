@@ -1,4 +1,4 @@
 CMake
-spatialindex
+libspatialindex
 portion
 Rtree

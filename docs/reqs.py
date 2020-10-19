@@ -1,3 +1,3 @@
 CMake
 portion
-Rtree
+autodoc_mock_imports = ['rtree']

@@ -3,21 +3,21 @@ import math
 from cut import *
 from box3D import *
 
-#funkcja licząca długość interwału potrzebna do funkcji is_half_out
 def mylen(interval):
+    '''Funkcja licząca długość interwału potrzebna do funkcji is_half_out'''
     if interval == my_closed(math.inf, -math.inf):
         return 0
     else:
         length = interval.upper - interval.lower if interval.lower > 0 else abs(interval.upper + interval.lower)
         return length
 
-'''
-klasa dzieląca pudełka
-zawiera ona 20 funkcji, z których każda rozbija pudełka
-Uwzględniłem możliwość wystąpienia half-out
-'''
 class split:
-    #pusty interwał
+    '''
+    Klasa dzieląca pudełka
+    zawiera ona 20 funkcji, z których każda rozbija pudełka
+    Uwzględniłem możliwość wystąpienia half-out
+    '''
+
     empty = my_closed(math.inf, -math.inf)
 
     def oI_II_oI_II_oI_II(self, box1, box2):
@@ -309,8 +309,8 @@ class split:
             table.append(box3D(x2 - x1, y2, z2))
         return table
 
-    #funkcja dobierająca właściwą funkcje rozbijającą na bazie trójki interwałów
     def split(self, idx_sign, tri_sign, tri_sign_i):
+        '''Funkcja dobierająca właściwą funkcje rozbijającą na bazie trójki interwałów'''
         box1 = box3D(tri_sign[0], tri_sign[1], tri_sign[2])
         box2 = box3D(tri_sign_i[0], tri_sign_i[1], tri_sign_i[2])
         rozbij_dict = {

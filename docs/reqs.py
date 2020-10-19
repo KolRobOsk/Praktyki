@@ -1,4 +1,4 @@
-libspatialindex_c.so.4
+https://github.com/libspatialindex/libspatialindex/releases/download/1.9.3/spatialindex-src-1.9.3.tar.gz
 portion
 CMake
 Rtree

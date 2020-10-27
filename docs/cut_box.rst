@@ -1,7 +1,7 @@
-mainalgo module
+cut\_box module
 ===============
 
-.. automodule:: mainalgo
+.. automodule:: cut_box
    :members:
    :undoc-members:
    :show-inheritance:

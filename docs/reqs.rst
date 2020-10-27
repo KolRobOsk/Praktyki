@@ -1,7 +1,7 @@
-boxes3D module
-==============
+reqs module
+===========
 
-.. automodule:: boxes3D
+.. automodule:: reqs
    :members:
    :undoc-members:
    :show-inheritance:

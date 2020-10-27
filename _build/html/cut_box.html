@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cut_box module &#8212; Pudełka 3D 1.1 - dokumentacja</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="genindex.html" />
+    <link rel="search" title="Szukaj" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-cut_box">
+<span id="cut-box-module"></span><h1>cut_box module<a class="headerlink" href="#module-cut_box" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<dl class="py class">
+<dt id="cut_box.box3D">
+<em class="property">class </em><code class="sig-prename descclassname">cut_box.</code><code class="sig-name descname">box3D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interval_x</span></em>, <em class="sig-param"><span class="n">interval_y</span></em>, <em class="sig-param"><span class="n">interval_z</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.box3D" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa przechowująca instrukcje dot. pudełek</p>
+<dl class="py method">
+<dt id="cut_box.box3D.factory">
+<em class="property">static </em><code class="sig-name descname">factory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x1</span></em>, <em class="sig-param"><span class="n">y1</span></em>, <em class="sig-param"><span class="n">z1</span></em>, <em class="sig-param"><span class="n">x2</span></em>, <em class="sig-param"><span class="n">y2</span></em>, <em class="sig-param"><span class="n">z2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.box3D.factory" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>metoda statyczna tworząca pudełko na podstawie interwałów
+podanych w kolejności wszystkie lower, potem wszystkie upper</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.box3D.get_interval_x">
+<code class="sig-name descname">get_interval_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.box3D.get_interval_x" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcje get dla jednego z interwałów</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.box3D.get_interval_y">
+<code class="sig-name descname">get_interval_y</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.box3D.get_interval_y" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcje get dla jednego z interwałów</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.box3D.get_interval_z">
+<code class="sig-name descname">get_interval_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.box3D.get_interval_z" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcje get dla jednego z interwałów</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="cut_box.myInterval">
+<em class="property">class </em><code class="sig-prename descclassname">cut_box.</code><code class="sig-name descname">myInterval</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">intervals</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.myInterval" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">portion.interval.Interval</span></code></p>
+<p>Klasa dziedzicząca z funkcji interwał</p>
+<dl class="py method">
+<dt id="cut_box.myInterval.box_cut">
+<code class="sig-name descname">box_cut</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">box1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.myInterval.box_cut" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcja przycinająca pudełko</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.box_cut_execute">
+<code class="sig-name descname">box_cut_execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.myInterval.box_cut_execute" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcja która przycina 1 interwał</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.box_uncut">
+<code class="sig-name descname">box_uncut</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">box1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.myInterval.box_uncut" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcja cofająca przycięcie pudełka</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.box_uncut_execute">
+<code class="sig-name descname">box_uncut_execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.myInterval.box_uncut_execute" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcja która cofa przycięcie 1 interwału</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="cut_box.myInterval.eps">
+<code class="sig-name descname">eps</code><em class="property"> = 1e-07</em><a class="headerlink" href="#cut_box.myInterval.eps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Epsilon - liczba potrzebna do przycięcia pudełek,
+bez tego są liczone jako przecinające się nawet jak
+tylko nachodzą na siebie granicami</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.get_lower_eps">
+<em class="property">property </em><code class="sig-name descname">get_lower_eps</code><a class="headerlink" href="#cut_box.myInterval.get_lower_eps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.get_lower_meps">
+<em class="property">property </em><code class="sig-name descname">get_lower_meps</code><a class="headerlink" href="#cut_box.myInterval.get_lower_meps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.get_upper_eps">
+<em class="property">property </em><code class="sig-name descname">get_upper_eps</code><a class="headerlink" href="#cut_box.myInterval.get_upper_eps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.get_upper_meps">
+<em class="property">property </em><code class="sig-name descname">get_upper_meps</code><a class="headerlink" href="#cut_box.myInterval.get_upper_meps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.lower_eps">
+<em class="property">property </em><code class="sig-name descname">lower_eps</code><a class="headerlink" href="#cut_box.myInterval.lower_eps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.lower_meps">
+<em class="property">property </em><code class="sig-name descname">lower_meps</code><a class="headerlink" href="#cut_box.myInterval.lower_meps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.upper_eps">
+<em class="property">property </em><code class="sig-name descname">upper_eps</code><a class="headerlink" href="#cut_box.myInterval.upper_eps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cut_box.myInterval.upper_meps">
+<em class="property">property </em><code class="sig-name descname">upper_meps</code><a class="headerlink" href="#cut_box.myInterval.upper_meps" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="cut_box.my_closed">
+<code class="sig-prename descclassname">cut_box.</code><code class="sig-name descname">my_closed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lower</span></em>, <em class="sig-param"><span class="n">upper</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cut_box.my_closed" title="Stały odnośnik do tej definicji">¶</a></dt>
+<dd><p>Funkcja tworząca interwał zastępująca oryginalny closed</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+<p class="caption"><span class="caption-text">Spis treści</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Szczeg%C3%B3%C5%82y_techniczne.html">1. Szczegóły techniczne</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modu%C5%82y.html">2. Lista modułów</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński i Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cut_box.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.2. Praktyki.cut_box &#8212; Pudełka 3D 1.1 - dokumentacja</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="genindex.html" />
+    <link rel="search" title="Szukaj" href="search.html" />
+    <link rel="next" title="3.3. Praktyki.signatures_setup" href="Praktyki.signatures_setup.html" />
+    <link rel="prev" title="3.1. Praktyki.boxes3D" href="Praktyki.boxes3D.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="praktyki-cut-box">
+<span id="id1"></span><h1><span class="section-number">3.2. </span>Praktyki.cut_box<a class="headerlink" href="#praktyki-cut-box" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<div class="section" id="rola-w-programie">
+<h2><span class="section-number">3.2.1. </span>rola w programie<a class="headerlink" href="#rola-w-programie" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>Moduł składa się z 2 klas: Box3D oraz myInterval oraz funkcji my_closed.
+Przy pomocy klasy Box3D tworzone są pudełka. Klasa myInterval dziedziczy
+z klasy Portion.Interval. Jej zadaniem jest przycinanie (odejmowanie bardzo
+małych liczb, czyli epsilonów od granicy interwałów) pudełek, aby program nie rozpoznawał
+pudełek jako przecinające się gdy tylko stykają się ze sobą.
+my_closed to funkcja tworząca interwał, który potem będzie można przyciąć.</p>
+</div>
+<div class="section" id="funkcje">
+<h2><span class="section-number">3.2.2. </span>funkcje<a class="headerlink" href="#funkcje" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>nazwa(typy argumentów:argumenty)</p>
+<ul class="simple">
+<li><p>my_closed(lower, upper) - funkcja tworząca interwał z atrybutami lower - dolna granica, upper - górna granica</p></li>
+<li><p>box3D.get_interval_x() - funkcja zwracająca interwał pudełka na płaszczyźnie x</p></li>
+<li><p>box3D.get_interval_y() - funkcja zwracająca interwał pudełka na płaszczyźnie y</p></li>
+<li><p>box3D.get_interval_z() - funkcja zwracająca interwał pudełka na płaszczyźnie z</p></li>
+<li><p>box3D.__contains__(list:num) - funkcja, która sprawdza czy punkt jest wewnątrz pudełka</p></li>
+<li><p>box3D.__ror__(list:num) - funkcja, która sprawdza czy punkt jest na granicy pudełek</p></li>
+<li><p>box3D.factory(complex:x1, complex:y1, complex:z1, complex:x2, complex:y2, complex:z2) - tworzy pudełko na bazie podanych wartości granicznych poszczególnych interwałów (x1 to dolna granica interwału x, zaś y2 to górna granica interwału y)</p></li>
+<li><p>myInterval.upper_eps() - atrybut o wartości górnej interwału przypisanego do obiektu + eps (epsilon, bardzo mała liczba)</p></li>
+<li><p>myInterval.upper_meps() - atrybut o wartości górnej interwału przypisanego do obiektu - eps (epsilon, bardzo mała liczba)</p></li>
+<li><p>myInterval.lower_eps() - atrybut o wartości dolnej interwału przypisanego do obiektu + eps (epsilon, bardzo mała liczba)</p></li>
+<li><p>myInterval.lower_meps() - atrybut o wartości dolnej interwału przypisanego do obiektu - eps (epsilon, bardzo mała liczba)</p></li>
+<li><p>myInterval.get_upper_eps() - funkcja zwracająca atrybut upper_eps</p></li>
+<li><p>myInterval.get_upper_meps() -funkcja zwracająca atrybut upper_meps</p></li>
+<li><p>myInterval.get_lower_eps() - funkcja zwracająca atrybut lower_eps</p></li>
+<li><p>myInterval.get_lower_meps() - funkcja zwracająca atrybut lower_eps</p></li>
+<li><p>myInterval.upper_eps() - funkcja ustawiająca atrybut upper_eps na podstawie atrybutu upper + eps</p></li>
+<li><p>myInterval.upper_meps() - funkcja ustawiająca atrybut upper_eps na podstawie atrybutu upper + eps</p></li>
+<li><p>myInterval.lower_eps() -  funkcja ustawiająca atrybut upper_eps na podstawie atrybutu lower + meps</p></li>
+<li><p>myInterval.lower_meps() -funkcja ustawiająca atrybut upper_eps na podstawie atrybutu lower + meps</p></li>
+<li><p>myInterval.box_cut(box3D: box1) - funkcja przycina pudełko tj. uruchamia dla każdego interwału (x, y, z) funkcję box_cut_execute</p></li>
+<li><p>myInterval.box_uncut(box3D: box2) - funkcja cofa działanie funkcji box_cut dla każdego interwału (x, y, z) przy pomocy funkcji box_uncut_execute</p></li>
+<li><p>myInterval.box_cut_execute(myInterval:interval) - funkcja zwraca dla podanego interwału interwał o wartościach granicznych lower + eps, upper - eps</p></li>
+<li><p>myInterval.box_uncut_execute(myInterval:interval) - funkcja zwraca dla podanego interwału interwał o wartościach granicznych lower - eps, upper + eps</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+<p class="caption"><span class="caption-text">Spis treści</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Podstawowe_informacje.html">1. Podstawowe informacje</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Szczeg%C3%B3%C5%82y_techniczne.html">2. Szczegóły techniczne</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Modu%C5%82y.html">3. Lista modułów</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.boxes3D.html">3.1. Praktyki.boxes3D</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.2. Praktyki.cut_box</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rola-w-programie">3.2.1. rola w programie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funkcje">3.2.2. funkcje</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.signatures_setup.html">3.3. Praktyki.signatures_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.split_intervals.html">3.4. Praktyki.split_intervals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.mainalgo.html">3.5. Praktyki.mainalgo</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Modu%C5%82y.html"><span class="section-number">3. </span>Lista modułów</a><ul>
+      <li>Previous: <a href="Praktyki.boxes3D.html" title="poprzedni rozdział"><span class="section-number">3.1. </span>Praktyki.boxes3D</a></li>
+      <li>Next: <a href="Praktyki.signatures_setup.html" title="następny rozdział"><span class="section-number">3.3. </span>Praktyki.signatures_setup</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński i Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Praktyki.cut_box.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

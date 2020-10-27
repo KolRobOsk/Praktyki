@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.3. Praktyki.signatures_setup &#8212; Pudełka 3D 1.1 - dokumentacja</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="genindex.html" />
+    <link rel="search" title="Szukaj" href="search.html" />
+    <link rel="next" title="3.4. Praktyki.split_intervals" href="Praktyki.split_intervals.html" />
+    <link rel="prev" title="3.2. Praktyki.cut_box" href="Praktyki.cut_box.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="praktyki-signatures-setup">
+<span id="id1"></span><h1><span class="section-number">3.3. </span>Praktyki.signatures_setup<a class="headerlink" href="#praktyki-signatures-setup" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<div class="section" id="rola-w-programie">
+<h2><span class="section-number">3.3.1. </span>rola w programie<a class="headerlink" href="#rola-w-programie" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>Moduł posiada klasę signatures, dzięki której możliwe jest przeprowadzanie operacji, takich jak permutacja czy sortowanie na sygnaturach.</p>
+</div>
+<div class="section" id="funkcje">
+<h2><span class="section-number">3.3.2. </span>funkcje<a class="headerlink" href="#funkcje" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>nazwa(typy argumentów:argumenty)</p>
+<ul class="simple">
+<li><p>signatures.io12(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli interwały są w stosunku out oraz drugi interwał ma wyższą wartość górną lub są w stosunku half out i drugi interwał ma większy przedział niż unia interwałów w innym przypadku zwraca False</p></li>
+<li><p>signatures.io21(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli interwały są w stosunku out oraz pierwszy interwał ma wyższą wartość górną lub są w stosunku half out i pierwszy interwał ma większy przedział niż unia interwałów, w innym przypadku zwraca False</p></li>
+<li><p>signatures.ii12(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli interwały są w stosunki in oraz drugi interwał ma większy przedział od pierwszego, w innym przypadku zwraca False</p></li>
+<li><p>signatures.ii21(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli interwały są w stosunki in oraz pierwszy interwał ma większy przedział od drugiego, w innym przypadku zwraca False</p></li>
+<li><p>signatures.get_signatures_triple(box3D:box1, box3D:box2) - funkcja zwraca listę sygnatur dla dwóch pudełek na wejściu, korzystając z funkcji get_signature dla każdej pary interwałów</p></li>
+<li><p>signatures.sort_signatures(box3D: box1, box3D: box2, list:in2sorted) - funkcja zwraca spermutowane według wzoru liste interwałów dwóch pudełek wejściowych</p></li>
+<li><p>signatures.permute_signatures(box_tab, sort_order) - funkcja permutuje interwały z listy</p></li>
+<li><p>signatures.permute(list:sortin, list:permutation) - funkcja permutuje listę (sortin) podaną na wejściu według ustalonego wzoru</p></li>
+<li><p>signatures.my_sort(list:inputlist) - funkcja zwraca 3 listy: listę posortowanych elementów, wzór permutacji aby dojść do kolejneści posortowanych elementów, oraz wzór permutacji aby cofnąć sortowanie</p></li>
+<li><p>signatures.is_in(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli między interwałami występuje stosunek in, w innym przypadku zwraca False</p></li>
+<li><p>signatures.is_out(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli między interwałami występuje stosunek out, w innym przypadku zwraca False</p></li>
+<li><p>signatures.is_equal(myInterval:interval1, myInterval:interval2) -  funkcja zwraca True jeśli między interwałami występuje stosunek equal, w innym przypadku zwraca False</p></li>
+<li><p>signatures.is_separate(myInterval:interval1, myInterval:interval2) - funkcja zwraca True jeśli między interwałami występuje stosunek separate, w innym przypadku zwraca False</p></li>
+<li><p>signatures.is_half_out(myInterval:interval1, myInterval:interval2) -  funkcja zwraca True jeśli między interwałami występuje stosunek half out, w innym przypadku zwraca False</p></li>
+<li><p>signatures.ie(myInterval:interval1, myInterval:interval2) - funkcja zwraca True gdy interwały mają równy przedział, w innym przypadku zwraca False</p></li>
+<li><p>signatures.get_signature(myInterval:interval1, myInterval:interval2) - funkcja zwraca konkretną sygnaturę dla danej pary interwałów: io12, io21, ii12, ii21, w przypadku stosunku ie zwraca ii12</p></li>
+<li><p>signatures.ret_original_order(list:split, list:sorted2in) - funkcja zwraca listę pudełek spermutowanych według wzoru permutacji sorted2in</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+<p class="caption"><span class="caption-text">Spis treści</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Podstawowe_informacje.html">1. Podstawowe informacje</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Szczeg%C3%B3%C5%82y_techniczne.html">2. Szczegóły techniczne</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Modu%C5%82y.html">3. Lista modułów</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.boxes3D.html">3.1. Praktyki.boxes3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.cut_box.html">3.2. Praktyki.cut_box</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.3. Praktyki.signatures_setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rola-w-programie">3.3.1. rola w programie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funkcje">3.3.2. funkcje</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.split_intervals.html">3.4. Praktyki.split_intervals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Praktyki.mainalgo.html">3.5. Praktyki.mainalgo</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Modu%C5%82y.html"><span class="section-number">3. </span>Lista modułów</a><ul>
+      <li>Previous: <a href="Praktyki.cut_box.html" title="poprzedni rozdział"><span class="section-number">3.2. </span>Praktyki.cut_box</a></li>
+      <li>Next: <a href="Praktyki.split_intervals.html" title="następny rozdział"><span class="section-number">3.4. </span>Praktyki.split_intervals</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński i Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Praktyki.signatures_setup.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

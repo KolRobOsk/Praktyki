@@ -19,15 +19,14 @@ próbuje zapisać coś co już jest
 class algorithm:
 
     def begin(self, box1, box2):
-	'''
-   	Funkcja przeprowadzająca sortowanie interwałów i rozbicia
-	dla jednej pary pudełek
-        '''
-        :param box3D() box1: Pudełko zdjęte z stosu funkcją pop	
-        :param box3D() box2: Pudełko zdjęte z drzewa funkcją pop
-        :return: Zwraca listę posortowanych interwałów
-        :rtype: list of complex
-    	
+    '''
+    :param box1: Pudełko zdjęte z stosu funkcją pop	      
+    :type box2: box3D()
+    :param box2: Pudełko zdjęte z drzewa funkcją pop
+    :type box2: box3D()
+    :return: Zwraca listę posortowanych interwałów      
+    :rtype: list of complex     
+    '''
         sign = signatures()
         spl = split()
         idx_sign = sign.get_signatures_triple(box1, box2)
@@ -43,8 +42,7 @@ class algorithm:
         Funkcja statyczna, w wyniku której wszystkie przecinające się
         pudełka ze stosu zostają rozbite i wstawione do drzewa 
         '''
-        :param boxStack() Q: Stos pudełek 
-        :param rtree() tree: Drzewo przechowujące pudełka
+
         #obiekt klasy myInterval
         my_int = myInterval()
         #zmienna potrzebna do wprowadzania pudełka w unikalne miejsce do drzewa

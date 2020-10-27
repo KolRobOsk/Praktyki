@@ -17,16 +17,10 @@ próbuje zapisać coś co już jest
 
 #główna klasa całego programu
 class algorithm:
+    '''
 
+    '''
     def begin(self, box1, box2):
-    '''
-    :param box1: Pudełko zdjęte z stosu funkcją pop	      
-    :type box2: box3D()
-    :param box2: Pudełko zdjęte z drzewa funkcją pop
-    :type box2: box3D()
-    :return: Zwraca listę posortowanych interwałów      
-    :rtype: list of complex     
-    '''
         sign = signatures()
         spl = split()
         idx_sign = sign.get_signatures_triple(box1, box2)

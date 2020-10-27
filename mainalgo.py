@@ -1,7 +1,8 @@
-from signatures import *
-from split import *
-from cut import *
 import os
+sys.path.insert(0, os.path.abspath('.'))
+from signatures_setup import *
+from split_intervals import *
+from cut_box import *
 
 try:
     os.remove('3d_index.idx')
@@ -16,11 +17,17 @@ próbuje zapisać coś co już jest
 
 #główna klasa całego programu
 class algorithm:
-    '''
-    Funkcja przeprowadzająca sortowanie interwałów i rozbicia
-    dla jednej pary pudełek
-    '''
+
     def begin(self, box1, box2):
+	'''
+   	Funkcja przeprowadzająca sortowanie interwałów i rozbicia
+	dla jednej pary pudełek
+        '''
+        :param box3D() box1: Pudełko zdjęte z stosu funkcją pop	
+        :param box3D() box2: Pudełko zdjęte z drzewa funkcją pop
+        :return: Zwraca listę posortowanych interwałów
+        :rtype: list of complex
+    	
         sign = signatures()
         spl = split()
         idx_sign = sign.get_signatures_triple(box1, box2)
@@ -34,8 +41,10 @@ class algorithm:
     def algorytm(Q, tree):
         '''
         Funkcja statyczna, w wyniku której wszystkie przecinające się
-        pudełka ze stosu zostają rozbite i wstawione do drzewa
+        pudełka ze stosu zostają rozbite i wstawione do drzewa 
         '''
+        :param boxStack() Q: Stos pudełek 
+        :param rtree() tree: Drzewo przechowujące pudełka
         #obiekt klasy myInterval
         my_int = myInterval()
         #zmienna potrzebna do wprowadzania pudełka w unikalne miejsce do drzewa
@@ -78,9 +87,3 @@ class algorithm:
         return tree.tree
         '''zwrócenie drzewa'''
 
-#uruchomienie algorytmu
-Q = boxStack()
-pudelka = int(input('Ile pudełek?: '))
-for i in range(pudelka):
-    Q.append(box3D.factory(int(input("Podaj po jednej z sześciu współrzędnych pudełka oddzielonych enterem: \n")), int(input()), int(input()), int(input()), int(input()), int(input())))
-algorithm().algorytm(Q, tree())

@@ -4,7 +4,7 @@ Praktyki package
 Submodules
 ----------
 
-Praktyki.boxes3D module
+..Praktyki.boxes3D module
 -----------------------
 
 .. automodule:: Praktyki.boxes3D
@@ -12,7 +12,7 @@ Praktyki.boxes3D module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.conf module
+..Praktyki.conf module
 --------------------
 
 .. automodule:: Praktyki.conf
@@ -20,7 +20,7 @@ Praktyki.conf module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.cut\_box module
+..Praktyki.cut\_box module
 ------------------------
 
 .. automodule:: Praktyki.cut_box
@@ -28,7 +28,7 @@ Praktyki.cut\_box module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.mainalgo module
+..Praktyki.mainalgo module
 ------------------------
 
 .. automodule:: Praktyki.mainalgo
@@ -36,7 +36,7 @@ Praktyki.mainalgo module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.reqs module
+..Praktyki.reqs module
 --------------------
 
 .. automodule:: Praktyki.reqs
@@ -44,7 +44,7 @@ Praktyki.reqs module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.signatures\_setup module
+..Praktyki.signatures\_setup module
 ---------------------------------
 
 .. automodule:: Praktyki.signatures_setup
@@ -52,7 +52,7 @@ Praktyki.signatures\_setup module
    :undoc-members:
    :show-inheritance:
 
-Praktyki.split\_intervals module
+..Praktyki.split\_intervals module
 --------------------------------
 
 .. automodule:: Praktyki.split_intervals

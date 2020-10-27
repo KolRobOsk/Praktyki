@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.4. mainalgo &#8212; Pudełka 3D 1.1 - dokumentacja</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Indeks" href="genindex.html" />
+    <link rel="search" title="Szukaj" href="search.html" />
+    <link rel="prev" title="3.3. split_intervals" href="split_intervals.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="mainalgo">
+<span id="id1"></span><h1><span class="section-number">3.4. </span>mainalgo<a class="headerlink" href="#mainalgo" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<div class="section" id="rola-w-programie">
+<h2><span class="section-number">3.4.1. </span>rola w programie<a class="headerlink" href="#rola-w-programie" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>Moduł służy do uruchomienia całego algorytmu.
+Usuwa pliki pozostawione po ostatnim drzewie.
+Posiada jedną klasę, algorithm.</p>
+</div>
+<div class="section" id="funkcje">
+<h2><span class="section-number">3.4.2. </span>funkcje<a class="headerlink" href="#funkcje" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>nazwa(typy argumentów:argumenty)</p>
+<ul class="simple">
+<li><p>algorithm.algorytm(BoxStack:Q, rtree:tree) - statyczna funkcja, inicjuje główną pętlę programu, sprawdza czy pudełko rozpatrywane przecina się z którymkolwiek zawartym w drzewie. Jeśli tak, usuwa jedno z przecinających się z drzewa i rozbija je z pudełkiem ze stosu i wstawia na stos.  Jeśli nie, wstawia na pudełko na drzewo i usuwa ze stosu.</p></li>
+<li><p>algorithm.begin(Box3D:box1, Box3D:box2) - zmienia tworzy tablicę sygnatur dla dwóch pudełek, sortuje je, według ich kolejności permutuje interwały w pudełkach. Następnie pudełka zostają rozbite, a ich interwały permutowane do pierwotnej kolejności.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Pudełka 3D</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+<p class="caption"><span class="caption-text">Spis treści</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Podstawowe_informacje.html">1. Podstawowe informacje</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Szczeg%C3%B3%C5%82y_techniczne.html">2. Szczegóły techniczne</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Modu%C5%82y.html">3. Lista modułów</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="boxes3D.html">3.1. boxes3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signatures_setup.html">3.2. signatures_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="split_intervals.html">3.3. split_intervals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.4. mainalgo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rola-w-programie">3.4.1. rola w programie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funkcje">3.4.2. funkcje</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Modu%C5%82y.html"><span class="section-number">3. </span>Lista modułów</a><ul>
+      <li>Previous: <a href="split_intervals.html" title="poprzedni rozdział"><span class="section-number">3.3. </span>split_intervals</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Dr. Marcin Kuropatwiński i Robert Kolke.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/mainalgo.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

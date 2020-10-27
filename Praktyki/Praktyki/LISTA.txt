@@ -1,0 +1,31 @@
+	.. toctree::
+   :numbered:
+
+Licencja      
+===========================================
+
+Spis treści
+-------------------------------------
+
+
+
+
+
+
+
+
+
+ 
+Boxes.box3D
+rola w programie
+funkcje
+Cut_box.cut_box
+rola w programie
+funkcje
+Signatures_setup.signatures_setup
+rola w programie
+funkcje
+Split_intervals.split_intervals
+rola w programie
+funkcje
+Przykład uruchomienia algorytmu   

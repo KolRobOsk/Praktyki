@@ -6,10 +6,10 @@ import portion
 from cut_box import *
 from signatures_setup import split as TEST
 from portion import closed, closedopen, openclosed
-
 #unit testy
 import random as rnd
 import unittest
+
 class algorithm_check(unittest.TestCase):
 
     out_interval_bigger = closed(3, 6)

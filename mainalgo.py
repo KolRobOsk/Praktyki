@@ -3,6 +3,8 @@ sys.path.insert(0, os.path.abspath('.'))
 from signatures_setup import *
 from split_intervals import *
 from cut_box import *
+from walls import wallStack
+from wall_operation import *
 
 try:
     os.remove('3d_index.idx')
@@ -45,14 +47,14 @@ class algorithm:
         :return: lista pudełek po rozbiciu\n
         :rtype: list
         '''
-        Q, drzewo = boxStack(), tree()
+        Q, W, drzewo = boxStack(), wallStack(), tree()
         Q.extend(box_list)
-        algorithm().algorytm(Q, drzewo)
-        return drzewo.ret_boxes()
+        StosScian = algorithm().algorytm(Q, W, drzewo)
+        return drzewo.ret_boxes(), StosScian
 		
 		
     @staticmethod
-    def algorytm(Q, tree):
+    def algorytm(Q, W, tree):
         '''
         Funkcja statyczna, w wyniku której wszystkie przecinające się
         pudełka ze stosu zostają rozbite i wstawione do drzewa
@@ -61,7 +63,6 @@ class algorithm:
         :return: drzewo rtree zawierające pudełka\n
         :rtype: tree.tree
         '''
-
         #obiekt klasy myInterval
         my_int = myInterval()
         #zmienna potrzebna do wprowadzania pudełka w unikalne miejsce do drzewa
@@ -92,3 +93,7 @@ class algorithm:
                 #dodanie nowego pudełka do drzewa i zwiększenie zmiennej iD o 1
                 iD += 1
 
+        for box in tree.tree.intersection(tree.tree.get_bounds()[:], objects=True):
+            operation = WallOperations()
+            W.append(operation.execute_2D(box.object))
+        return W

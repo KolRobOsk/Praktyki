@@ -25,9 +25,9 @@ class algorithm_test(unittest.TestCase):
         table_copy = self.copy_box_list(table)
         stack = boxStack()
         stack.extend(table)
+        W = wallStack()
         drzewo = tree()
-        algorithm().algorytm(stack, drzewo)
-    
+        algorithm().algorytm(stack, W, drzewo)
         self.assertEqual(True, algorithm_check().evaluate(table_copy, drzewo.ret_boxes(), 10000))
 
 

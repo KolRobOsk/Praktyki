@@ -270,7 +270,7 @@ class myInterval(portion.Interval):
         :return: interwał w stanie takim samym jak przed przycięciem\n
         :rtype: myInterval
         '''
-        interval = my_closed(myInt.get_lower_meps, myInt.get_upper_eps)
+        interval = my_closed(round(myInt.lower), round(myInt.upper))
         return interval
 
     def box_uncut(self, box1):

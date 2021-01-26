@@ -214,3 +214,14 @@ class signatures:
             perm = self.permute_signatures(j, sorted2in)
             table.append(box3D(perm[0], perm[1], perm[2]))
         return table
+
+    def intersection2D(self, box, boxlist):
+        boxes_res = []
+        for i in boxlist:
+            if not self.is_separate(box.interval_x, i.interval_x):
+                boxes_res.append(i)
+            if not self.is_separate(box.interval_y, i.interval_y):
+                boxes_res.append(i)
+            if not self.is_separate(box.interval_z, i.interval_z):
+                boxes_res.append(i)
+        return boxes_res

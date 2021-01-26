@@ -1,10 +1,8 @@
 import math
 import os, sys
 sys.path.append('..')
-from split_intervals import split 
-import portion
 from cut_box import *
-from signatures_setup import split as TEST
+from split_intervals import split as TEST, mylen
 from portion import closed, closedopen, openclosed
 #unit testy
 import random as rnd
@@ -38,13 +36,36 @@ class algorithm_check(unittest.TestCase):
             print('\n', b.interval_x, b.interval_y, b.interval_z, '\n', x)
             return False
 
-    def evaluate(self, boxes_in, boxes_out, checks_num = 1000):
+    def evaluate(self, boxes_in, boxes_out, checks_num=1000):
         for i in range(checks_num):
             if self.loop_test(boxes_in, boxes_out):
                 continue
             else:
                 return False
         return True
+
+    def evaluate2D(self, boxes_in, boxes_out, checks_num=1000):
+        for i in range(checks_num):
+            if self.loop_test2D(boxes_in, boxes_out):
+                continue
+            else:
+                return False
+        return True
+
+    def loop_test2D(self, boxes_in, boxes_out):
+        b = rnd.choice(boxes_in)
+        x = self.random_point_from_a_box(b)
+        num_in = sum([b.__contains__(x) for b in boxes_out])
+        num_boundary = sum([b.__ror__(x) for b in boxes_out])
+        if (num_in == 1) or ((num_in == num_boundary) and (num_in != 0)):
+            return True
+        else:
+            if num_in != 1 & num_in != num_boundary:
+                print('\n__contains__ error')
+            else:
+                print('\n__ror__ error')
+            print('\n', b.interval_x, b.interval_y, b.interval_z, '\n', x)
+            return False
 
     def test_oI_II_oI_II_oI_II(self):
         box0 = box3D(self.interval_smaller, self.interval_smaller, self.interval_smaller)

@@ -2,8 +2,24 @@ import portion
 from math import inf
 from collections import namedtuple
 import random
+import math
+
 
 Atomic = namedtuple('Atomic', ['left', 'lower', 'upper', 'right'])
+
+def mylen(interval):
+    '''
+    Funkcja licząca długość interwału potrzebna do funkcji is_half_out\n
+    :param interval: interwał do zmierzenia długości\n
+    :return: długość interwału\n
+    :rtype: float
+    '''
+    if interval == my_closed(math.inf, -math.inf):
+        return 0
+    else:
+        length = interval.upper - interval.lower if interval.lower > 0 else abs(interval.upper + interval.lower)
+        return length
+
 
 
 class box3D:
@@ -19,6 +35,17 @@ class box3D:
         self.interval_x = interval_x
         self.interval_y = interval_y
         self.interval_z = interval_z
+
+
+
+    def get_wall_xy(self):
+        return box3D(self.interval_x, self.interval_y, my_closed(0, 0))
+
+    def get_wall_xz(self):
+        return box3D(self.interval_x, my_closed(0, 0),  self.interval_z)
+
+    def get_wall_yz(self):
+        return box3D( my_closed(0, 0), self.interval_y, self.interval_z,)
 
     def get_interval_x(self):
         '''
@@ -50,7 +77,23 @@ class box3D:
         :param num: tablica zawierająca 3 wartości punktu sprawdzanego - x, y, z\n
         :rtype: bool
         '''
-        return True if (num[0] in self.interval_x) & (num[1] in self.interval_y) & (num[2] in self.interval_z) else False
+        checksum = 0
+        x = num[0] if num[0] != my_closed(math.inf, -math.inf) else None
+        y = num[1] if num[1] != my_closed(math.inf, -math.inf) else None
+        z = num[2] if num[2] != my_closed(math.inf, -math.inf) else None
+        for i in [x, y, z]:
+            if not i:
+                checksum += 1
+        if checksum == 0:
+            return True if (x in self.interval_x) & (y in self.interval_y) & (z in self.interval_z) else False
+        elif checksum == 1:
+            if not x:
+                return True if (y in self.interval_y) & (z in self.interval_z) else False
+            if not y:
+                return True if (x in self.interval_x) & (z in self.interval_z) else False
+            if not z:
+                return True if (x in self.interval_x) & (y in self.interval_y) else False
+
 
     def __ror__(self, num):
         '''
@@ -58,11 +101,24 @@ class box3D:
         :param num: tablica zawierająca 3 wartości punktu sprawdzanego - x, y, z\n
         :rtype: bool
         '''
-        x, y, z = num[0], num[1], num[2]
-        is_on_border = x in set([self.interval_x.lower, self.interval_x.upper]) or y in set([self.interval_y.lower, self.interval_y.upper]) or z in set([self.interval_z.lower, self.interval_z.upper])
+        checksum = 0
+        x = num[0] if num[0] != my_closed(math.inf, -math.inf) else None
+        y = num[1] if num[1] != my_closed(math.inf, -math.inf) else None
+        z = num[2] if num[2] != my_closed(math.inf, -math.inf) else None
+        for i in [x, y, z]:
+            if not i:
+                checksum += 1
         is_inside_box = self.__contains__(num)
+        if checksum == 0:
+            is_on_border = x in set([self.interval_x.lower, self.interval_x.upper]) or y in set([self.interval_y.lower, self.interval_y.upper]) or z in set([self.interval_z.lower, self.interval_z.upper])
+        elif checksum == 1:
+            if not x:
+                is_on_border = y in set([self.interval_y.lower, self.interval_y.upper]) or z in set([self.interval_z.lower, self.interval_z.upper])
+            elif not y:
+                is_on_border = x in set([self.interval_x.lower, self.interval_x.upper]) or z in set([self.interval_z.lower, self.interval_z.upper])
+            elif not z:
+                is_on_border = x in set([self.interval_x.lower, self.interval_x.upper]) or y in set([self.interval_y.lower, self.interval_y.upper])
         return True if is_on_border & is_inside_box else False
-
 
     def __str__(self):
         '''
@@ -122,11 +178,11 @@ class myInterval(portion.Interval):
     bez tego są liczone jako przecinające się nawet jak
     tylko nachodzą na siebie granicami
     '''
-    
+
     def __init__(self):
         super().__init__()
         self.eps = 1e-7
-        
+
 
     @property
     def upper_eps(self):
@@ -141,7 +197,7 @@ class myInterval(portion.Interval):
     def upper_meps(self):
         '''
         Atrybut upper_meps\n
-        :return: górną  granicę interwału - eps(ilon)\n  
+        :return: górną  granicę interwału - eps(ilon)\n
         :rtype: float
         '''
         return self.upper - self.eps
@@ -151,7 +207,7 @@ class myInterval(portion.Interval):
         '''
         Atrybut lower_eps\n
         :return: dolną  granicę interwału + eps(ilon)\n
-        :rtype: float        
+        :rtype: float
         '''
         return self.lower + self.eps
 
@@ -289,7 +345,7 @@ class myInterval(portion.Interval):
         z = self.box_uncut_execute(z)
         box = box3D(x, y, z)
         return box
-    
+
     @staticmethod
     def my_from_atomic(left, lower, upper, right):
         '''
@@ -302,5 +358,5 @@ class myInterval(portion.Interval):
         right = right if upper not in [inf, -inf] else portion.const.Bound.OPEN
         instance._intervals = [Atomic(left, lower, upper, right)]
         if instance.empty:
-            return myInterval() 
+            return myInterval()
         return instance

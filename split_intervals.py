@@ -1,20 +1,6 @@
 import portion
 import math
 from cut_box import *
-from boxes3D import *
-
-def mylen(interval):
-    '''
-    Funkcja licząca długość interwału potrzebna do funkcji is_half_out\n
-    :param interval: interwał do zmierzenia długości\n
-    :return: długość interwału\n
-    :rtype: float
-    '''
-    if interval == my_closed(math.inf, -math.inf):
-        return 0
-    else:
-        length = interval.upper - interval.lower if interval.lower > 0 else abs(interval.upper + interval.lower)
-        return length
 
 class split:
     '''

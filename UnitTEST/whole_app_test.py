@@ -17,6 +17,11 @@ class algorithm_test(unittest.TestCase):
         return copy_list
 
     def test_funkcji_algorytm(self):
+        try:
+            os.remove('3d_index.idx')
+            os.remove('3d_index.dat')
+        except:
+            pass
         table = []
         ile_pudelek = randint(2, 10)
         for j in range(ile_pudelek):
@@ -28,25 +33,31 @@ class algorithm_test(unittest.TestCase):
         algorithm().algorytm(old_stack, drzewo)
         self.assertEqual(True, algorithm_check().evaluate(table_copy, drzewo.ret_boxes(), 10))
 
-    def test_funkcji_2D_rozbijanie_xy(self):
+    def test_funkcji_2D_rozbijanie_mixed(self):
+        try:
+            os.remove('3d_index.idx')
+            os.remove('3d_index.dat')
+        except:
+            pass
         W, Walls = boxStack(), boxStack()
         ile_pudelek = randint(8, 10)
         new_w = []
-        new_walls = []
+        drzewo3 = tree()
+        new_walls = boxStack()
         for j in range(ile_pudelek):
             W.extend([box3D.random()])
         Walls.extend(self.copy_box_list(W.get_stack()))
-        operations = WallOperations()
         for i in range(len(W.get_stack())):
-            new_walls.append(W.get_stack()[i].get_wall_xy())
-            new_w.append(Walls.get_stack()[i].get_wall_xy())
-        walls_p = operations.split_boxes(new_walls)
-        self.assertEqual(True, algorithm_check().evaluate2D(new_w, walls_p.get_stack(), 1000))
-
-
+            new_walls.extend([W.get_stack()[i].get_wall_xy(3)])
+            new_w.append(Walls.get_stack()[i].get_wall_xy(3))
+        ile_pudelek = randint(8, 10)
+        for j in range(ile_pudelek):
+            W.extend([box3D.random()])
+        for i in range(len(W.get_stack())):
+            new_walls.extend([W.get_stack()[i]])
+            new_w.append(W.get_stack()[i])
+        algorithm().algorytm(new_walls, drzewo3)
+        self.assertEqual(True, algorithm_check().evaluate2D(new_w, drzewo3.ret_boxes(), 1000))
 
 if __name__ == '__main__':
     unittest.main()
-
-
-

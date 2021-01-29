@@ -1,5 +1,4 @@
 import rtree
-from portion import closed
 from cut_box import box3D
 
 class boxStack:

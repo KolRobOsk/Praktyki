@@ -10,7 +10,6 @@ class split:
     :param empty: interwał pusty 
     '''
 
-    empty = my_closed(math.inf, -math.inf)
 
     def oI_II_oI_II_oI_II(self, box1, box2):
         x1, y1, z1 = my_closed(box1.interval_x.lower, box1.interval_x.upper), \
@@ -20,11 +19,11 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if x2 - x1 != self.empty:
+        if not (x2 - x1).empty:
             table.append(box3D(x2 - x1, y2 & y1, z2))
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2, y2 - y1, z2))
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x1 & x2, y1 & y2, z2 - z1))
         return table
 
@@ -36,11 +35,11 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if x2 - x1 != self.empty:
+        if not (x2 - x1).empty:
             table.append(box3D(x2 - x1, y2, z2))
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2 & x1, y2 - y1, z2))
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x1 & x2, y1 & y2, z2 - z1))
         return table
 
@@ -52,11 +51,11 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if z1 - z2 != self.empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x1 & x2, y1 & y2, z1 - z2))
-        if y1 - y2 != self.empty:
+        if not (y1 - y2).empty:
             table.append(box3D(x1, y1 - y2, z1))
-        if x1 - x2 != self.empty:
+        if not (x1 - x2).empty:
             table.append(box3D(x1 - x2, y2 & y1, z1))
         return table
 
@@ -68,11 +67,11 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x1 & x2, y1 & y2, z2 - z1))
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2, y2 - y1, z2))
-        if x2 - x1 != self.empty:
+        if not (x2 - x1).empty:
             table.append(box3D(x2 - x1, y2 & y1, z2))
         return table
 
@@ -93,15 +92,15 @@ class split:
         table = [box3D(x2, y2, z2)]
         z = [i for i in z1 - z2]
         if len(z) == 2:
-            if z[0] != self.empty and z[1] != self.empty:
+            if not z[0].empty and not z[1].empty:
                 table.append(box3D(x1, y1, z[0]))
                 table.append(box3D(x1, y1, z[1]))
-        if len(z) != 2 or (self.empty in z):
-            if z[0] != self.empty:
+        if len(z) != 2 or (not z[1].empty and not z[0].empty):
+            if not z[0].empty:
                 table.append(box3D(x1, y1, z[0]))
             if len(z) == 2:
-                if z[1] != self.empty:
-                    table.append(x1, y1, z[1])
+                if not z[1].empty:
+                    table.append(box3D(x1, y1, z[1]))
         return table
 
     def iI_II_iII_I_iII_I(self, box1, box2):
@@ -113,10 +112,10 @@ class split:
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
         x = [i for i in x2 - x1]
-        if x[0] != self.empty:
+        if not x[0].empty:
             table.append(box3D(x[0], y2, z2))
         if len(x) == 2:
-            if x[1] != self.empty:
+            if not x[1].empty:
                 table.append(box3D(x[1], y2, z2))
         return table
 
@@ -135,9 +134,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if z1 - z2 != self.empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x1, y2 & y1, z1 - z2))
-        if y1 - y2 != self.empty:
+        if not (y1 - y2).empty:
             table.append(box3D(x1, y1 - y2, z1))
         return table
 
@@ -149,9 +148,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if z1 - z2 != self.empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x2, y1 & y2, z1 - z2))
-        if y1 - y2 != self.empty:
+        if not (y1 - y2).empty:
             table.append(box3D(x1, y1 - y2, z1))
         return table
 
@@ -163,9 +162,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x1, y1 - y2, z1))
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x1, y1 & y2, z1 - z2))
         return table
 
@@ -177,7 +176,7 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if z1 - z2 != self.empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x1, y1, z1 - z2))
         return table
 
@@ -189,9 +188,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2, y2 - y1, z2))
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2, y2 & y1, z2 - z1))
         return table
 
@@ -204,15 +203,16 @@ class split:
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         x = [i for i in x2 - x1]
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x1 & x2, y1 & y2, z2 - z1))
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2, y2 - y1, z2))
-        if x[0] != self.empty:
-            box3D(x[0], y1 & y2, z2)
-        if len(x) == 2:
-            if x[1] != self.empty:
-                box3D(x[1], y1 & y2, z2)
+        if not len(x) == 0:
+            if not x[0].empty:
+                box3D(x[0], y1 & y2, z2)
+            if len(x) == 2:
+                if not x[1].empty:
+                    box3D(x[1], y1 & y2, z2)
         return table
 
     def iII_I_oI_II_oII_I(self, box1, box2):
@@ -223,9 +223,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2, y2 & y1, z2 - z1))
-        if y2 - y1 != self.empty:
+        if not (y2 - y1).empty:
             table.append(box3D(x2, y2 - y1, z2))
         return table
 
@@ -237,7 +237,7 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2, y2, z2 - z1))
         return table
 
@@ -250,9 +250,9 @@ class split:
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         x = [i for i in x2 - x1]
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2 & x1, y2 & y1, z2 - z1))
-        if not (self.empty in x) and (len(x) == 2):
+        if (len(x) == 2) and not x[0].empty and not x[1].empty:
             table.append(box3D(x[0], y2, z2))
             table.append(box3D(x[1], y2, z2))
         else:
@@ -267,7 +267,7 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if z1 - z2 != self.empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x1, y1, z1 - z2))
         return table
 
@@ -279,7 +279,7 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2, y2, z2 - z1))
         return table
 
@@ -292,9 +292,9 @@ class split:
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         x = [x for x in x2 - x1]
         table = [box3D(x1, y1, z1)]
-        if z2 - z1 != self.empty:
+        if not (z2 - z1).empty:
             table.append(box3D(x2 & x1, y2 & y1, z2 - z1))
-        if not (self.empty in x) and (len(x) == 2):
+        if not x[0].empty and not x[1].empty and (len(x) == 2):
             table.append(box3D(x[0], y2, z2))
             table.append(box3D(x[1], y2, z2))
         else:

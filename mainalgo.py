@@ -39,6 +39,111 @@ class algorithm:
         table = sign.ret_original_order(split_sign, sorted2in)
         return table
 
+    def rotate_and_execute2D(self, wall, box):
+        spl = WallOperations()
+        box_temp = self.check_if_wall(wall, box)
+        stack = spl.split_boxes([wall, box_temp])
+        stack = stack.get_stack()
+        sign = signatures()
+        walls_inter, walls_not_inter = sign.intersection2D(box, stack)
+        while not len(walls_inter) == 0:
+            wall = walls_inter.pop()
+            cond, cond_2 = sign.intersection2D(box, stack)
+            if cond:
+                if wall.interval_x.empty:
+                    temp = self.cut_pieces2D([wall.interval_y, wall.interval_z], [box.interval_y, box.interval_z])
+                    temp = box3D(temp.interval_x, wall.interval_y, wall.interval_z) if temp else None
+                elif wall.interval_y.empty():
+                    temp = self.cut_pieces2D([wall.interval_x, wall.interval_z], [box.interval_x, box.interval_z])
+                    temp = box3D(wall.interval_x, temp.interval_y, wall.interval_z) if temp else None
+                elif wall.interval_z.empty():
+                    temp = self.cut_pieces2D([wall.interval_x, wall.interval_y], [box.interval_x, box.interval_y])
+                    temp = box3D(wall.interval_x, wall.interval_y, temp.interval_z) if temp else None
+                walls_inter.append(temp)
+            else:
+                walls_not_inter.append(wall)
+        return walls_not_inter
+
+
+
+        '''
+        stack_res = []
+        for box_res in stack:
+            checksum = self.execute2D_check(box_res, box_temp)
+            if checksum == 3:
+                if mylen(box.interval_y) == 0:
+                    box_temp_2 = self.cut_pieces2D([box_res.interval_x, box_res.interval_z],
+                                               [box.interval_x, box.interval_z])
+                    if box_temp_2:
+                        if box_temp_2[0] and box_temp_2[1]:
+                            stack_res.append(box3D(box_temp_2[0], box.interval_y, box_temp_2[1]))
+                        elif box_temp_2[1]:
+                            stack_res.append(box3D(box_temp_2[0], box.interval_y, box_temp_2[1]))
+                        elif box_temp_2[0]:
+                            stack_res.append(box3D(box.interval_x, box.interval_y, box_temp_2[1]))
+
+                elif mylen(box.interval_x) == 0:
+                    box_temp_2 = self.cut_pieces2D([box_res.interval_y, box_res.interval_z],
+                                                   [box.interval_y, box.interval_z])
+                    if box_temp_2:
+                        if box_temp_2[0] and box_temp_2[1]:
+                            stack_res.append(box3D(box.interval_x, box_temp_2[0], box_temp_2[1]))
+                        elif box_temp_2[1]:
+                            stack_res.append(box3D(box.interval_x, box_temp_2[1], box.interval_z))
+                        elif box_temp_2[0]:
+                            stack_res.append(box3D(box.interval_x, box.interval_y, box_temp_2[1]))
+
+                elif mylen(box.interval_z) == 0:
+                    box_temp_2 = self.cut_pieces2D([box_res.interval_x, box_res.interval_y],
+                                                   [box.interval_x, box.interval_y])
+                    if box_temp_2:
+                        if box_temp_2[0] and box_temp_2[1]:
+                            stack_res.append(box3D(box_temp_2[0], box_temp_2[1], box.interval_z))
+                        elif box_temp_2[1]:
+                            stack_res.append(box3D(box.interval_x, box_temp_2[0], box.interval_z))
+                        elif box_temp_2[0]:
+                            stack_res.append(box3D(box_temp_2[0], box.interval_y, box.interval_z))
+                else:
+                    continue
+        return stack_res
+        '''
+
+    def cut_pieces2D(self, wall_res, box):
+        if mylen(wall_res[0]) < mylen(box[0]) and mylen(wall_res[1]) < mylen(box[1]):
+            return None
+        else:
+            if mylen(wall_res[0]) > mylen(box[0]):
+                wall_res[0] = wall_res[0] - box[0]
+            elif mylen(wall_res[0]) < mylen(box[0]):
+                wall_res[0] = box[0]
+            if mylen(wall_res[1]) > mylen(box[1]):
+                wall_res[1] = wall_res[1] - box[1]
+            elif mylen(wall_res[1]) < mylen(box[1]):
+                wall_res[1] = box[0]
+            return wall_res if wall_res[0] and wall_res[1] else None
+
+    def execute2D_check(self, box_res, box_temp):
+        checksum = 0
+        if box_res.interval_x in box_temp.interval_x or box_res.interval_x == box_temp.interval_x:
+            checksum += 1
+        if box_res.interval_y in box_temp.interval_y or box_res.interval_y == box_temp.interval_y:
+            checksum += 1
+        if box_res.interval_z in box_temp.interval_z or box_res.interval_z == box_temp.interval_z:
+            checksum += 1
+        return checksum
+
+    def check_if_wall(self, wall, box):
+        box_temp = box3D(wall.interval_x, wall.interval_y, wall.interval_z)
+        if not box.is_wall:
+            if mylen(wall.interval_x) == 0:
+                box_temp = box3D(wall.interval_x, box.get_interval_y(), box.get_interval_z())
+            elif mylen(wall.interval_y) == 0:
+                box_temp = box3D(box.interval_x, wall.get_interval_y(), box.get_interval_z())
+            elif mylen(wall.interval_z) == 0:
+                box_temp = box3D(box.interval_x, box.get_interval_y(), wall.get_interval_z())
+        return box_temp if box.is_wall else box
+
+
     @staticmethod
     def execute(box_list):
         '''
@@ -49,7 +154,7 @@ class algorithm:
         '''
         Q, drzewo = boxStack(), tree()
         Q.extend(box_list)
-        algorithm().algorytm(Q, boxStack(), drzewo)
+        algorithm().algorytm(Q, drzewo)
         return drzewo
 		
 		
@@ -84,7 +189,10 @@ class algorithm:
                 q = my_int.box_uncut(q)
                 j = my_int.box_uncut(j)
                 #cofnięcie przycięcia dla pudełek które mają być rozbite
-                Q.extend(algorithm().rotate_and_execute(q, j))
+                if q.is_wall or j.is_wall:
+                    Q.extend(algorithm().rotate_and_execute2D(q, j))
+                else:
+                    Q.extend(algorithm().rotate_and_execute(q, j))
                 #wprowadzenie wyniku rozbicia na stos
                 tree.tree.delete(i.id, (i.bbox[0], i.bbox[1], i.bbox[2], i.bbox[3], i.bbox[4], i.bbox[5]))
                 #usunięcie starego pudełka z drzewa

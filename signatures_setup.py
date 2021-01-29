@@ -216,7 +216,7 @@ class signatures:
         return table
 
     def intersection2D(self, box, boxlist):
-        boxes_res = []
+        boxes_res, boxes_not = [], []
         for i in boxlist:
             if not self.is_separate(box.interval_x, i.interval_x):
                 boxes_res.append(i)
@@ -224,4 +224,6 @@ class signatures:
                 boxes_res.append(i)
             if not self.is_separate(box.interval_z, i.interval_z):
                 boxes_res.append(i)
-        return boxes_res
+            else:
+                boxes_not.append(i)
+        return boxes_res, boxes_not

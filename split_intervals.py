@@ -162,9 +162,9 @@ class split:
                      my_closed(box2.interval_y.lower, box2.interval_y.upper), \
                      my_closed(box2.interval_z.lower, box2.interval_z.upper)
         table = [box3D(x2, y2, z2)]
-        if not (y2 - y1).empty:
+        if not (y1 - y2).empty:
             table.append(box3D(x1, y1 - y2, z1))
-        if not (z2 - z1).empty:
+        if not (z1 - z2).empty:
             table.append(box3D(x1, y1 & y2, z1 - z2))
         return table
 
@@ -294,9 +294,11 @@ class split:
         table = [box3D(x1, y1, z1)]
         if not (z2 - z1).empty:
             table.append(box3D(x2 & x1, y2 & y1, z2 - z1))
-        if not x[0].empty and not x[1].empty and (len(x) == 2):
-            table.append(box3D(x[0], y2, z2))
-            table.append(box3D(x[1], y2, z2))
+        if (len(x) == 2):
+            if not x[1].empty:
+                table.append(box3D(x[1], y2, z2))
+            if not x[0].empty:
+                table.append(box3D(x[0], y2, z2))
         else:
             table.append(box3D(x2 - x1, y2, z2))
         return table

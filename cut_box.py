@@ -234,10 +234,7 @@ class box3D:
         self.interval_x = interval_x
         self.interval_y = interval_y
         self.interval_z = interval_z
-        self.is_wall = True if sum([(mylen(interval_x) == 0), (mylen(interval_y) == 0), (mylen(interval_z) == 0)]) == 1 else False
-
-    def set_is_wall(self):
-        self.is_wall = True if sum([(mylen(self.interval_x) == 0), (mylen(self.interval_y) == 0), (mylen(self.interval_z) == 0)]) == 1 else False
+        self.is_wall = True if sum([mylen(interval_x) == 0, mylen(interval_y) == 0, mylen(interval_z) == 0]) == 1 else False
 
     def get_is_wall(self):
         return self.is_wall
@@ -291,6 +288,7 @@ class box3D:
                 return True if sum([(num[0] in self.interval_x), (num[1] in self.interval_y), num[2] == self.interval_z]) == 3 else False
         elif all([mylen(self.interval_x), mylen(self.interval_y), mylen(self.interval_z)]):
             return True if (num[0] in self.interval_x) & (num[1] in self.interval_y) & (num[2] in self.interval_z) else False
+        return False
 
     def __ror__(self, num):
         '''
@@ -299,6 +297,7 @@ class box3D:
         :rtype: bool
         '''
         x, y, z = num[0], num[1], num[2]
+        is_on_border = False
         if self.is_wall:
             if mylen(self.interval_x) == 0:
                 is_on_border = True if y in set([self.interval_y.lower, self.interval_y.upper]) or \

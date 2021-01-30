@@ -59,14 +59,14 @@ class algorithm:
                 elif wall.interval_z.empty():
                     temp = self.cut_pieces2D([wall.interval_x, wall.interval_y], [box.interval_x, box.interval_y])
                     temp = box3D(wall.interval_x, wall.interval_y, temp.interval_z) if temp else None
+                
                 walls_inter.append(temp)
             else:
                 walls_not_inter.append(wall)
         return walls_not_inter
-
-
-
         '''
+        return stack
+
         stack_res = []
         for box_res in stack:
             checksum = self.execute2D_check(box_res, box_temp)
@@ -136,12 +136,12 @@ class algorithm:
         box_temp = box3D(wall.interval_x, wall.interval_y, wall.interval_z)
         if not box.is_wall:
             if mylen(wall.interval_x) == 0:
-                box_temp = box3D(wall.interval_x, box.get_interval_y(), box.get_interval_z())
+                box_temp = box3D(wall.get_interval_x(), box.get_interval_y(), box.get_interval_z())
             elif mylen(wall.interval_y) == 0:
-                box_temp = box3D(box.interval_x, wall.get_interval_y(), box.get_interval_z())
+                box_temp = box3D(box.get_interval_x(), wall.get_interval_y(), box.get_interval_z())
             elif mylen(wall.interval_z) == 0:
-                box_temp = box3D(box.interval_x, box.get_interval_y(), wall.get_interval_z())
-        return box_temp if box.is_wall else box
+                box_temp = box3D(box.get_interval_x(), box.get_interval_y(), wall.get_interval_z())
+        return box_temp if not box.is_wall else box
 
 
     @staticmethod
@@ -190,13 +190,21 @@ class algorithm:
                 j = my_int.box_uncut(j)
                 #cofnięcie przycięcia dla pudełek które mają być rozbite
                 if q.is_wall or j.is_wall:
-                    Q.extend(algorithm().rotate_and_execute2D(q, j))
+                    if q.is_wall and j.is_wall:
+                        Q.extend(algorithm().rotate_and_execute2D(q, j))
+                    elif q.is_wall:
+                        Q.extend(algorithm().rotate_and_execute2D(q, j))
+                    elif j.is_wall:
+                        Q.extend(algorithm().rotate_and_execute2D(j, q))
                 else:
                     Q.extend(algorithm().rotate_and_execute(q, j))
                 #wprowadzenie wyniku rozbicia na stos
                 tree.tree.delete(i.id, (i.bbox[0], i.bbox[1], i.bbox[2], i.bbox[3], i.bbox[4], i.bbox[5]))
                 #usunięcie starego pudełka z drzewa
             else:
-                tree.tree.add(iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
+                print(q)
+                if not q.is_wall:
+                    tree.tree.add(iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
+
                 #dodanie nowego pudełka do drzewa i zwiększenie zmiennej iD o 1
                 iD += 1

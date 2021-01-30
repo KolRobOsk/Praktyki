@@ -11,9 +11,9 @@ from wall_operation import *
 
 class algorithm_check(unittest.TestCase):
 
-    out_interval_bigger = my_closed(3, 6)
-    interval_smaller = my_closed(2, 5)
-    in_interval_bigger = my_closed(1, 6)
+    out_interval_bigger = my_closed(2, 7)
+    interval_smaller = my_closed(3, 4)
+    in_interval_bigger = my_closed(2, 5)
     tst = TEST()
 
     def random_point_from_a_box(self, box):

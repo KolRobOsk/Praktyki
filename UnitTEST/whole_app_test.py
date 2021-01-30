@@ -48,8 +48,8 @@ class algorithm_test(unittest.TestCase):
             W.extend([box3D.random()])
         Walls.extend(self.copy_box_list(W.get_stack()))
         for i in range(len(W.get_stack())):
-            new_walls.extend([W.get_stack()[i].get_wall_xy(3)])
-            new_w.append(Walls.get_stack()[i].get_wall_xy(3))
+            new_walls.extend([W.get_stack()[i].get_wall_yz(3)])
+            new_w.append(Walls.get_stack()[i].get_wall_yz(3))
         ile_pudelek = randint(8, 10)
         for j in range(ile_pudelek):
             W.extend([box3D.random()])

@@ -16,7 +16,7 @@ pudelka = algorithm.execute(table)
 #uruchomienie funkcji execute i rozbicie pudełek
 ktore = 0
 print('Pudełka wyjściowe: ')
-for box in pudelka.ret_boxes():
+for box in pudelka.get_stack():
     print('Pudełko wyjściowe {}'.format(ktore + 1))
     print(box)
     ktore += 1

@@ -30,8 +30,8 @@ class algorithm_test(unittest.TestCase):
         old_stack = boxStack()
         old_stack.extend(table)
         drzewo = tree()
-        algorithm().algorytm(old_stack, drzewo)
-        self.assertEqual(True, algorithm_check().evaluate(table_copy, drzewo.ret_boxes(), 10))
+        stos = algorithm().algorytm(old_stack, drzewo)
+        self.assertEqual(True, algorithm_check().evaluate(table_copy, stos.get_stack(), 10))
 
     def test_funkcji_2D_rozbijanie_mixed(self):
         try:
@@ -56,8 +56,8 @@ class algorithm_test(unittest.TestCase):
         for i in range(len(W.get_stack())):
             new_walls.extend([W.get_stack()[i]])
             new_w.append(W.get_stack()[i])
-        algorithm().algorytm(new_walls, drzewo3)
-        self.assertEqual(True, algorithm_check().evaluate2D(new_w, drzewo3.ret_boxes(), 1000))
+        stos = algorithm().algorytm(new_walls, drzewo3)
+        self.assertEqual(True, algorithm_check().evaluate2D(new_w, stos.get_stack(), 1000))
 
 if __name__ == '__main__':
     unittest.main()

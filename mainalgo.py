@@ -154,9 +154,11 @@ class algorithm:
         '''
         Q, drzewo = boxStack(), tree()
         Q.extend(box_list)
-        algorithm().algorytm(Q, drzewo)
-        return drzewo
-		
+        stos = algorithm().algorytm(Q, drzewo)
+        return stos
+
+        #return drzewo
+
 		
     @staticmethod
     def algorytm(Q, tree):
@@ -172,18 +174,19 @@ class algorithm:
         my_int = myInterval()
         #zmienna potrzebna do wprowadzania pudełka w unikalne miejsce do drzewa
         iD = 0
+        stack_res = boxStack()
         #pętla działa dopóki stos nie zostanie pusty
         while not Q.empty():
             #zdjęcie ostatniego pudełka ze stosu i przycięcie go
             q = Q.pop()
             q = my_int.box_cut(q)
-            if tree.tree.count((q.interval_x.lower,  q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper,  q.interval_z.upper)) > 0:
+            if not len([i.intersection(q) for i in stack_res.get_stack()]) == 0:
                 '''
                 Sprawdzenie czy pudełko q przecina się z którymkolwiek elementem z drzewa.
                 Jeśli tak, pudełko przecinające się zostaje pobrane z drzewa i usunięte,
                 zaś wynik rozbicia zostaje wstawiony ponownie na stos pudełek
                 '''
-                i = list(tree.tree.intersection((q.interval_x.lower,  q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper,  q.interval_z.upper), objects=True))[0]
+                i = stack_res.pop(list.index([i.intersection(q) for i in stack_res.get_stack()][0]))#wycięte intersection drzewa
                 inter = [i.object.interval_x, i.object.interval_y, i.object.interval_z]
                 j = box3D(inter[0], inter[1], inter[2])
                 q = my_int.box_uncut(q)
@@ -199,12 +202,11 @@ class algorithm:
                 else:
                     Q.extend(algorithm().rotate_and_execute(q, j))
                 #wprowadzenie wyniku rozbicia na stos
-                tree.tree.delete(i.id, (i.bbox[0], i.bbox[1], i.bbox[2], i.bbox[3], i.bbox[4], i.bbox[5]))
+                #tree.tree.delete(i.id, (i.bbox[0], i.bbox[1], i.bbox[2], i.bbox[3], i.bbox[4], i.bbox[5]))
                 #usunięcie starego pudełka z drzewa
             else:
-                print(q)
-                if not q.is_wall:
-                    tree.tree.add(iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
-
+                #tree.tree.add(iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
+                stack_res.extend([q])
                 #dodanie nowego pudełka do drzewa i zwiększenie zmiennej iD o 1
-                iD += 1
+                #iD += 1
+            return stack_res

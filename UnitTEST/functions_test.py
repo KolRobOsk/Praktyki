@@ -17,9 +17,9 @@ class algorithm_check(unittest.TestCase):
     tst = TEST()
 
     def random_point_from_a_box(self, box):
-        num_x = box.interval_x if mylen(box.interval_x) == 0 else rnd.randint(box.interval_x.lower, box.interval_x.upper)
-        num_y = box.interval_y if mylen(box.interval_y) == 0 else rnd.randint(box.interval_y.lower, box.interval_y.upper)
-        num_z = box.interval_z if mylen(box.interval_z) == 0 else rnd.randint(box.interval_z.lower, box.interval_z.upper)
+        num_x = box.interval_x.lower if mylen(box.interval_x) == 0 else rnd.randint(box.interval_x.lower, box.interval_x.upper)
+        num_y = box.interval_y.lower if mylen(box.interval_y) == 0 else rnd.randint(box.interval_y.lower, box.interval_y.upper)
+        num_z = box.interval_z.lower if mylen(box.interval_z) == 0 else rnd.randint(box.interval_z.lower, box.interval_z.upper)
         return [num_x, num_y, num_z]
 
     def loop_test(self, boxes_in, boxes_out):

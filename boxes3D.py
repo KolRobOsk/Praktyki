@@ -83,3 +83,38 @@ class tree:
         boxes = [item.bbox for item in boxes]
         boxes = [box3D.factory(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3])), int(round(item[4])), int(round(item[5]))) for item in boxes]
         return boxes
+
+class tree2D():
+    def __init__(self):
+        '''Tworzenie drzewa'''
+        self.properties = rtree.index.Property()
+        self.properties.dimension = 2
+        self.tree = rtree.index.Index('2d_index', properties=self.properties)
+
+
+    def get_tree(self):
+        '''
+        Funkcje get drzewa\n
+        :return: drzewo rtree na którym algorytm główny zamieszcza pudełka\n
+        :rtype: rtree
+        '''
+        return self.tree
+
+    def set_tree(self, new_tree):
+        '''
+        Funkcje set drzewa\n
+        :param new_tree: nowe drzewo
+        '''
+        self.tree = new_tree
+
+    def ret_boxes(self):
+        '''
+    	Funkcja zwracająca pudełka w drzewie
+    	:return: pudełka znajdujące się w drzewie
+    	:rtype: list
+    	'''
+        boxes = self.tree.intersection(self.tree.get_bounds(), True)
+        boxes = [item.bbox for item in boxes]
+        boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
+        return boxes
+

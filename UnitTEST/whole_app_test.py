@@ -37,27 +37,27 @@ class algorithm_test(unittest.TestCase):
         try:
             os.remove('3d_index.idx')
             os.remove('3d_index.dat')
+            os.remove('2d_index.idx')
+            os.remove('2d_index.dat')
         except:
             pass
         W, Walls = boxStack(), boxStack()
         ile_pudelek = randint(8, 10)
         new_w = []
         drzewo3 = tree()
+        drzewo4 = tree2D()
         new_walls = boxStack()
         for j in range(ile_pudelek):
             W.extend([box3D.random()])
         Walls.extend(self.copy_box_list(W.get_stack()))
         for i in range(len(W.get_stack())):
-            new_walls.extend([W.get_stack()[i].get_wall_yz(3)])
-            new_w.append(Walls.get_stack()[i].get_wall_yz(3))
-        ile_pudelek = randint(8, 10)
-        for j in range(ile_pudelek):
-            W.extend([box3D.random()])
-        for i in range(len(W.get_stack())):
-            new_walls.extend([W.get_stack()[i]])
-            new_w.append(W.get_stack()[i])
-        stos = algorithm().algorytm(new_walls, drzewo3)
-        self.assertEqual(True, algorithm_check().evaluate2D(new_w, stos.get_stack(), 1000))
+            new_walls.extend([W.get_stack()[i].get_wall_xy(3)])
+            new_w.append(W.get_stack()[i].get_wall_xy(3))
+        algorithm().algorytm(new_walls, drzewo3, drzewo4)
+        stos = [] #self.uncut_boxes_and_walls(new_walls, drzewo3)
+        stos.extend(drzewo4.ret_boxes())
+        stos_2 = [[box3D(wall.interval_x, wall.interval_y, my_closed(3, 3))] for wall in stos]
+        self.assertEqual(True, algorithm_check().evaluate2D(new_w, stos_2[0],  1000))
 
 if __name__ == '__main__':
     unittest.main()

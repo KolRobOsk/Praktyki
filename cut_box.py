@@ -165,7 +165,7 @@ class myInterval(portion.Interval):
         x = self.box_cut_execute(x)
         y = self.box_cut_execute(y)
         z = self.box_cut_execute(z)
-        box = box3D(x, y, z)
+        box = box3D(x, y, z, box1.iD)
         return box
 
     def box_uncut_execute(self, myInt):
@@ -224,7 +224,7 @@ def my_closed(lower, upper):
 class box3D:
     '''Klasa przechowująca instrukcje dot. pudełek'''
 
-    def __init__(self, interval_x, interval_y, interval_z):
+    def __init__(self, interval_x, interval_y, interval_z, iD = None):
         '''
         :param interval_x: interwał opisujący położenie pudełka na płaszczyźnie x \n
         :param interval_y: interwał opisujący położenie pudełka na płaszczyźnie y \n
@@ -235,9 +235,10 @@ class box3D:
         self.interval_y = interval_y
         self.interval_z = interval_z
         self.is_wall = True if sum([mylen(interval_x) == 0, mylen(interval_y) == 0, mylen(interval_z) == 0]) == 1 else False
-
-    def get_is_wall(self):
-        return self.is_wall
+        self.is_empty_x = True if mylen(interval_x) == 0 else False
+        self.is_empty_y = True if mylen(interval_y) == 0 else False
+        self.is_empty_z = True if mylen(interval_z) == 0 else False
+        self.iD = iD
 
     def get_wall_xy(self, z):
         return box3D(self.interval_x, self.interval_y, my_closed(z, z))
@@ -286,7 +287,7 @@ class box3D:
                 return True if sum([(num[0] in self.interval_x), (num[2] in self.interval_z), num[1] == self.interval_y]) == 3 else False
             elif mylen(self.interval_z) == 0:
                 return True if sum([(num[0] in self.interval_x), (num[1] in self.interval_y), num[2] == self.interval_z]) == 3 else False
-        elif all([mylen(self.interval_x), mylen(self.interval_y), mylen(self.interval_z)]):
+        elif all([mylen(self.interval_x) > 0, mylen(self.interval_y) > 0, mylen(self.interval_z) > 0]):
             return True if (num[0] in self.interval_x) & (num[1] in self.interval_y) & (num[2] in self.interval_z) else False
         return False
 
@@ -305,11 +306,10 @@ class box3D:
             elif mylen(self.interval_y) == 0:
                 is_on_border = True if x in set([self.interval_x.lower, self.interval_x.upper]) or \
                                z in set([self.interval_z.lower, self.interval_z.upper]) else False
-
             elif mylen(self.interval_z) == 0:
                 is_on_border = True if x in set([self.interval_x.lower, self.interval_x.upper]) or \
                                y in set([self.interval_y.lower, self.interval_y.upper]) else False
-        elif all([mylen(self.interval_x) != 0, mylen(self.interval_y) != 0 , mylen(self.interval_z) != 0]):
+        elif all([mylen(self.interval_x) != 0, mylen(self.interval_y) != 0, mylen(self.interval_z) != 0]):
             is_on_border = x in set([self.interval_x.lower, self.interval_x.upper]) or y in set([self.interval_y.lower, self.interval_y.upper]) or z in set([self.interval_z.lower, self.interval_z.upper])
         is_inside_box = self.__contains__(num)
         return True if is_on_border & is_inside_box else False
@@ -321,9 +321,8 @@ class box3D:
         '''
         x = self.get_interval_x()
         y = self.get_interval_y()
-        z = self.get_interval_z()
-        lista = [x.lower, x.upper, y.lower, y.upper, z.lower, z.upper]
-        intervals = '[' + str(lista[0]) + ',' + str(lista[1]) + ']' + ' x ' + '[' + str(lista[2]) + ',' + str(lista[3]) + ']' + ' x ' + '[' + str(lista[4]) + ',' + str(lista[5]) + ']' + '\n'
+        lista = [x.lower, x.upper, y.lower, y.upper]
+        intervals = '[' + str(lista[0]) + ',' + str(lista[1]) + ']' + ' x ' + '[' + str(lista[2]) + ',' + str(lista[3]) + ']' + '\n'
         return intervals
 
     @staticmethod
@@ -337,11 +336,11 @@ class box3D:
         """
         side_x, side_y, side_z = random.randint(1, side_range), random.randint(1, side_range), random.randint(1, side_range)
         corner_x, corner_y, corner_z = random.randint(0, corner_range), random.randint(0, corner_range), random.randint(0, corner_range)
-        return box3D(my_closed(corner_x, corner_x + side_x), my_closed(corner_y, corner_y + side_y), my_closed(corner_z, corner_z + side_z))
+        return box3D(my_closed(corner_x, corner_x + side_x), my_closed(corner_y, corner_y + side_y), my_closed(corner_z, corner_z + side_z), random.randint(1, 100000))
         
     
     @staticmethod
-    def factory(x1, y1, z1, x2, y2, z2):
+    def factory(x1, y1, z1, x2, y2, z2, iD = None):
         '''
         metoda statyczna tworząca pudełko na podstawie interwałów\n
         podanych w kolejności wszystkie lower, potem wszystkie upper\n
@@ -354,5 +353,19 @@ class box3D:
         :return: nowy obiekt pudełko\n
         :rtype: box3D
         '''
-        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z1, z2))
+        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z1, z2), iD)
+
+    @staticmethod
+    def factory2D(x1, y1, x2, y2):
+        '''
+        metoda statyczna tworząca pudełko na podstawie interwałów\n
+        podanych w kolejności wszystkie lower, potem wszystkie upper\n
+        :param x1: wartość lower dla interwału na osi x\n
+        :param y1: wartość lower dla interwału na osi y\n
+        :param x2: wartość upper dla interwału na osi x\n
+        :param y2: wartość upper dla interwału na osi y\n
+        :return: nowy obiekt pudełko\n
+        :rtype: box3D
+        '''
+        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(0, 0), 0)
 

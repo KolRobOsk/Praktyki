@@ -11,7 +11,7 @@ class signatures:
         :rtype: bool
         '''
         len1, len2 = (mylen(interval1), mylen(interval2))
-        difference = len2 - len1 if len1 > 0 else len1 + len2
+        difference = len2 - len1 if len1 > 0 else abs(len1 + len2)
         if ((interval1.upper < interval2.upper) & (self.is_out(interval1, interval2)))| (self.is_half_out(interval1, interval2) & (difference > 0)):
             return True
         else:
@@ -36,8 +36,8 @@ class signatures:
         :rtype: bool
         '''
         len1, len2 = (mylen(interval1), mylen(interval2))
-        difference = len1 - len2 if len2 > 0 else len1 + len2
-        if (interval2.upper < interval1.upper) & (self.is_out(interval1, interval2)) | (self.is_half_out(interval1, interval2) & (difference > 0)):
+        difference = len1 - len2 if len2 > 0 else abs(len1 + len2)
+        if ((interval2.upper < interval1.upper) & (self.is_out(interval1, interval2))) | ((self.is_half_out(interval1, interval2) & (difference > 0))):
             return True
         else:
             return False
@@ -50,7 +50,8 @@ class signatures:
         :return: True jeśli interwały są w relacji in oraz pierwszy interwał jest ma przedział zaczynający się wyżej\n
         :rtype: bool
         '''
-        return True if (self.is_in(interval1, interval2) & (interval1.upper > interval2.upper)) else False
+        len1, len2 = mylen(interval1), mylen(interval2)
+        return True if self.is_in(interval1, interval2) & (len1 - len2 > 0) else False
 
     def get_signatures_triple(self, box1, box2):
         '''
@@ -125,7 +126,7 @@ class signatures:
         :rtype: bool
         '''
         union = interval1 & interval2
-        return True if ((union.lower == interval1.lower and union.upper == interval1.upper) ^ (union.lower == interval2.lower and union.upper == interval2.upper)) else False
+        return True if ((union.lower == interval1.lower and union.upper == interval1.upper) or (union.lower == interval2.lower and union.upper == interval2.upper)) else False
 
 
     def is_equal(self, interval1, interval2):
@@ -147,7 +148,9 @@ class signatures:
         :return: True jeśli pudełka są w relacji out, inaczej False\n
         :rtype: bool
         '''
-        return True if (interval1.lower != interval2.lower) and (interval2.upper != interval1.upper) and (interval1 & interval2) else False
+        cond_1 = True if (interval1.lower > interval2.lower) and (interval2.upper < interval1.upper) and (interval1 & interval2) else False
+        cond_2 = True if (interval1.lower < interval2.lower) and (interval2.upper > interval1.upper) and (interval1 & interval2) else False
+        return True if cond_1 or cond_2 else False
 
 
     def is_separate(self, int1, int2):
@@ -200,6 +203,7 @@ class signatures:
         if self.ie(interval1, interval2):
             return 'ii12'
 
+
     def ret_original_order(self, split, sorted2in):
         '''
         Funkcja przywracająca oryginalny porządek interwałów\n
@@ -215,15 +219,10 @@ class signatures:
             table.append(box3D(perm[0], perm[1], perm[2]))
         return table
 
-    def intersection2D(self, box, boxlist):
-        boxes_res, boxes_not = [], []
+    @staticmethod
+    def intersection2D(box, boxlist):
+        sign, boxes_res = signatures(), []
         for i in boxlist:
-            if not self.is_separate(box.interval_x, i.interval_x):
+            if not all(sign.is_separate(box.interval_x, i.interval_x), sign.is_separate(box.interval_y, i.interval_y), sign.is_separate(box.interval_z, i.interval_z)):
                 boxes_res.append(i)
-            if not self.is_separate(box.interval_y, i.interval_y):
-                boxes_res.append(i)
-            if not self.is_separate(box.interval_z, i.interval_z):
-                boxes_res.append(i)
-            else:
-                boxes_not.append(i)
-        return boxes_res, boxes_not
+        return boxes_res

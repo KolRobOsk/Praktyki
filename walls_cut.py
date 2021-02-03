@@ -21,9 +21,9 @@ class WallCut:
         return box3D(res[0], res[1], res[2], wall.iD)
 
     def wall_cut_execute(self, inter):
-        inter = my_closed(inter.get_lower_eps, inter.get_upper_meps) if not inter.empty else round(inter)
+        eps = 1e-7
+        inter = my_closed(inter.lower - eps, inter.upper + eps) if not mylen(inter) == 0 else inter
         return inter
-
 
     def signat_reverse(self, signat):
         new_sign = []
@@ -79,7 +79,11 @@ class WallCut:
 
     def iI_II_iII_I_3D(self, wall, box):
         wall_y_temp = [wall[0][1] - box[0][1]]
-        return [[wall[0][0], wall_y_temp[0]], [wall[0][0], wall_y_temp[1]]], [[box[0][0], box[0][1]]]
+        walls_temp = [[wall[0][0], wall_y_temp[0]]]
+        if len(wall_y_temp) == 2:
+            if wall_y_temp[1]:
+                walls_temp.append([wall[0][0], wall_y_temp[1]])
+        return walls_temp, [[box[0][0], box[0][1]]]
 
     def iI_II_oI_II_3D(self, wall, box):
         return [[wall[0][0], wall[0][1] - box[0][1]]], [[box[0][0], box[0][1]]]
@@ -90,8 +94,17 @@ class WallCut:
     def iII_I_iII_I_3D(self, wall, box):
         wall_x_temp = [wall[0][0] - box[0][0]]
         wall_y_temp = [wall[0][1] - box[0][1]]
-        walls_temp = [[wall[0][0], wall_y_temp[0]], [wall[0][0], wall_y_temp[1]],
-                      wall_x_temp[0], wall[0][1] & box[0][1], wall_x_temp[1], wall[0][1] & box[0][1]]
+        walls_temp = []
+        if wall_x_temp[0]:
+            walls_temp.append([wall_x_temp[0], wall[0][1] & box[0][1]])
+        if len(wall_x_temp) == 2:
+            if wall_x_temp[1]:
+                walls_temp.append([wall_x_temp[1], wall[0][1] & box[0][1]])
+        if wall_y_temp[0]:
+            walls_temp.append([wall[0][0], wall_y_temp[0]])
+        if len(wall_y_temp) == 2:
+            if wall_y_temp[1]:
+                walls_temp.append([wall[0][0], wall_y_temp[1]])
         return walls_temp, [[box[0][0], box[0][1]]]
 
     def iII_I_oI_II_3D(self, wall, box):
@@ -99,7 +112,10 @@ class WallCut:
 
     def iII_I_oII_I_3D(self, wall, box):
         wall_x_temp = [wall[0][0] - box[0][0]]
-        wall_temp = [[wall_x_temp[0], wall[0][1]], [wall_x_temp[1], wall[0][1]], [wall[0][0], wall[0][1] - box[0][1]]]
+        wall_temp = [[wall_x_temp[0], wall[0][1]], [wall[0][0], wall[0][1] - box[0][1]]]
+        if len(wall_x_temp) == 2:
+            if wall_x_temp[1]:
+                wall_temp.append([wall_x_temp[1], wall[0][1]])
         return wall_temp, [[box[0][0], box[0][1]]]
 
     def oI_II_oI_II_3D(self, wall, box):
@@ -135,12 +151,16 @@ class WallCut:
 
 
     def get_signatures_double(self, wall1, wall2):
+        wall1, wall2 = self.wall_uncut(wall1), self.wall_uncut(wall2)
         wall1 = [wall1.interval_x, wall1.interval_y, wall1.interval_z]
         wall2 = [wall2.interval_x, wall2.interval_y, wall2.interval_z]
         sign, signatures_res = signatures(), []
+        where_equal = where_in = None
         for i in range(len(wall1)):
             if any([mylen(wall1[i]) == 0, mylen(wall2[i]) == 0]):
                 signatures_res.append('not intersect')
+            elif i == where_equal and where_in:
+                signatures_res.append(sign.get_signature(wall1[where_in], wall2[where_in]))
             else:
                 signatures_res.append(sign.get_signature(wall1[i], wall2[i]))
         return signatures_res
@@ -152,14 +172,17 @@ class WallCut:
 
 
     def iI_II_iII_I(self, wall1, wall2):
-        res = [[wall2[0]]]
-        temp = [i for i in wall1[0][1] - wall2[0][1]]
-        if len(temp) == 2:
-            if temp[1]:
-                res[0].append([wall1[0][0], temp[1]])
-        if temp:
-            res[0].append([wall1[0][0], temp[0]])
-        return res
+        if signatures().is_equal(wall1[0][1], wall2[0][1]) or signatures().is_equal(wall2[0][0], wall1[0][0]):
+            return self.iI_II_iI_II(wall1, wall2)
+        else:
+            res = [[wall2[0]]]
+            temp = [i for i in wall1[0][1] - wall2[0][1]]
+            if len(temp) == 2:
+                if temp[1]:
+                    res[0].append([wall1[0][0], temp[1]])
+            if temp:
+                res[0].append([wall1[0][0], temp[0]])
+            return res
 
 
     def iI_II_oI_II(self, wall1, wall2):

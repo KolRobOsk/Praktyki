@@ -45,7 +45,9 @@ class algorithm_test(unittest.TestCase):
         ile_pudelek = randint(8, 10)
         new_w = []
         drzewo3 = tree()
-        drzewo4 = tree2D()
+        drzewo_xy = tree2D_xy()
+        drzewo_yz = tree2D_yz()
+        drzewo_xz = tree2D_xz()
         new_walls = boxStack()
         for j in range(ile_pudelek):
             W.extend([box3D.random()])
@@ -53,7 +55,7 @@ class algorithm_test(unittest.TestCase):
         for i in range(len(W.get_stack())):
             new_walls.extend([W.get_stack()[i].get_wall_xy(3)])
             new_w.append(W.get_stack()[i].get_wall_xy(3))
-        algorithm().algorytm(new_walls, drzewo3, drzewo4)
+        algorithm().algorytm(new_walls, drzewo3, drzewo_xy, drzewo_yz, drzewo_xz)
         stos = [] #self.uncut_boxes_and_walls(new_walls, drzewo3)
         stos.extend(drzewo4.ret_boxes())
         stos_2 = [[box3D(wall.interval_x, wall.interval_y, my_closed(3, 3))] for wall in stos]

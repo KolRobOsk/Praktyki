@@ -356,7 +356,7 @@ class box3D:
         return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z1, z2), iD)
 
     @staticmethod
-    def factory2D(x1, y1, x2, y2):
+    def factory2D(x1, y1, x2, y2, z = 0, iD = None):
         '''
         metoda statyczna tworząca pudełko na podstawie interwałów\n
         podanych w kolejności wszystkie lower, potem wszystkie upper\n
@@ -367,5 +367,5 @@ class box3D:
         :return: nowy obiekt pudełko\n
         :rtype: box3D
         '''
-        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(0, 0), 0)
+        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z, z), 0)
 

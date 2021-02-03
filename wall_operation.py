@@ -6,11 +6,13 @@ from walls_cut import *
 
 class WallOperations:
 
-    def split_boxes(self, walllist, iD_list, iD, iD2):
+    def split_boxes(self, wall, box, iD_list, iD, iD2):
         wall_cut_obj, sign, walls_res, myint = WallCut(), signatures(), [], myInterval()
-        wall1, wall2 = walllist[0], walllist[1]
+        wall1 = box3D.factory(wall[0], wall[1], wall[4].lower, wall[2], wall[3], wall[4].upper, wall[5])
+        wall2 = box3D.factory(box[0], box[1], box[4].lower, box[2], box[3], box[4].upper, box[5])
         walls_temp = self.split_walls([wall1, wall2])
         for wall in walls_temp:
+            print(wall.interval_x, wall.interval_y, wall.interval_z)
             if not wall.is_wall:
                 walls_res.append(myint.box_cut(box3D(wall.interval_x, wall.interval_y, wall.interval_z, max(iD_list[0]) + 1)))
                 iD_list[0].append(max(iD_list[0]) + 1)
@@ -23,11 +25,10 @@ class WallOperations:
 
     def split_walls(self, walls):
         walls_temp_2, sign, walls_res, signature_list = [], signatures(), [], WallCut().get_signatures_double(walls[0], walls[1])
-        signature_list, in2sorted, sorted2in = sign.my_sort(signature_list)
+        sorted_sign, in2sorted, sorted2in = sign.my_sort(signature_list)
         temp_1 = sign.permute([walls[0].interval_x, walls[0].interval_y, walls[0].interval_z], in2sorted)
         temp_2 = sign.permute([walls[1].interval_x, walls[1].interval_y, walls[1].interval_z], in2sorted)
-        walls_temp = self.multi_split_2D(signature_list, [temp_1, temp_2])
-        print(walls_temp)
+        walls_temp = self.multi_split_2D(sorted_sign, [temp_1, temp_2])
         for wall in walls_temp[0]:
             walls_temp_2.append(sign.permute([wall.interval_x, wall.interval_y, wall.interval_z], sorted2in))
         for wall in walls_temp_2:
@@ -82,9 +83,10 @@ class WallOperations:
         return list_res
 
     def are_both_walls(self, walls):
-        return True if (box3D(walls[0][0], walls[0][1], walls[0][2]).is_wall and box3D(walls[1][0], walls[1][1], walls[1][2]).is_wall) else False
+        return True if box3D(walls[0][0], walls[0][1], walls[0][2]).is_wall and box3D(walls[1][0], walls[1][1], walls[1][2]).is_wall else False
 
     def single_split_2D(self, i, sign_list, third_inter, walls, both_walls):
+        ###POTENCJALNIE TUTAJ BŁĄD###
         wall_obj = WallCut()
         if sign_list[i] != 'not intersect' and both_walls:
             return [wall_obj.split_2D(sign_list, third_inter[0], [walls[0], walls[1], walls[2], walls[3]])]

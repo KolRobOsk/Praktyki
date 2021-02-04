@@ -92,7 +92,7 @@ class tree2D_xy(tree):
         self.tree = rtree.index.Index('2d_index_xy', properties=self.properties)
 
 
-    def ret_boxes(self):
+    def ret_boxes(self, dictionary=None):
         '''
     	Funkcja zwracająca pudełka w drzewie
     	:return: pudełka znajdujące się w drzewie
@@ -112,7 +112,7 @@ class tree2D_xz(tree):
         self.tree = rtree.index.Index('2d_index_xz', properties=self.properties)
 
 
-    def ret_boxes(self):
+    def ret_boxes(self, dictionary=None):
         '''
     	Funkcja zwracająca pudełka w drzewie
     	:return: pudełka znajdujące się w drzewie

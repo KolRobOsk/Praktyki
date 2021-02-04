@@ -158,9 +158,9 @@ class algorithm:
         if dictionary:
             return [box.interval_x.lower, box.interval_y.lower, box.interval_x.upper, box.interval_y.upper, dictionary[box.iD], box.iD]
         elif mylen(box.interval_y) == 0:
-                return [box.interval_x.lower, box.interval_y.lower, box.interval_x.upper, box.interval_z.upper, box.interval_y, box.iD]
+            return [box.interval_x.lower, box.interval_y.lower, box.interval_x.upper, box.interval_z.upper, box.interval_y, box.iD]
         elif mylen(box.interval_z) == 0:
-                return [box.interval_x.lower, box.interval_y.lower, box.interval_x.upper, box.interval_y.upper, box.interval_z, box.iD]
+            return [box.interval_x.lower, box.interval_y.lower, box.interval_x.upper, box.interval_y.upper, box.interval_z, box.iD]
         elif mylen(box.interval_x) == 0:
             return [box.interval_y.lower, box.interval_z.lower, box.interval_y.upper, box.interval_z.upper,
                     box.interval_x, box.iD]
@@ -174,14 +174,14 @@ class algorithm:
             tree2D_yz.tree.add(q.iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper), q)
         return q, tree2D_xy, tree2D_yz, tree2D_xz
 
-    def sub_algo_2D(self, q, j, Q, tree, iD, iD2, id_list, tree2D_where_interval):
+    def sub_algo_2D(self, q, j, Q,  iD, iD2, id_list, tree2D_where_interval):
         inter = j
         #tree.tree.delete(i.id, (i.bbox[0], id.bbox[1], i.bbox[2], i.bbox[3], i.bbox[4], i.bbox[5]))
         #usunięcie starego pudełka z drzewa
         res, id_list, iD, iD2 = self.rotate_and_execute2D(q, j, id_list, iD, iD2, tree2D_where_interval)
         # wprowadzenie wyniku rozbicia na stos
         Q.extend(res)
-        return j, q, Q, tree, inter, iD, iD2, id_list
+        return j, q, Q, inter, iD, iD2, id_list
 
     def dictionary_update_val(self, q):
         if q.is_empty_x:
@@ -191,6 +191,10 @@ class algorithm:
         elif q.is_empty_z:
             val = {str(q.iD): (q.interval_z)}
         return val
+    @staticmethod
+    def convert_closed_to_my_closed(closed_b):
+        my_closed_box = box3D(my_closed(closed_b.interval_x.lower, closed_b.interval_x.upper), my_closed(closed_b.interval_y.lower, closed_b.interval_y.upper), my_closed(closed_b.interval_z.lower, closed_b.interval_z.upper), closed_b.iD)
+        return my_closed_box
 
     @staticmethod
     def execute(box_list):
@@ -227,7 +231,12 @@ class algorithm:
         while not Q.empty():
             #zdjęcie ostatniego pudełka ze stosu i przycięcie go
             q = Q.pop()
+            q = algorithm.convert_closed_to_my_closed(q)
             q_third = oper.check_if_wall(q)
+            if q.is_wall:
+                q = WallCut().wall_cut(q)
+            else:
+                q = my_int.box_cut(q)
             if algo.condition3D(q, tree3D, q_third) and not sum([q.is_empty_z, q.is_empty_y, q.is_empty_x])>1:
                 '''
                 Sprawdzenie czy pudełko q przecina się z którymkolwiek elementem z drzewa.
@@ -245,40 +254,49 @@ class algorithm:
 
             elif algo.condition2D_xy(q, tree2D_xy, tree2D_where_interval):
                 j = algo.get_first_tree_object([q.interval_x, q.interval_y], tree2D_xy, 2)
-                j = WallCut().wall_uncut(j)
+                q = WallCut().wall_uncut(q)
                 tree2D_xy.tree.delete(j.iD, (j.interval_x.lower, j.interval_y.lower, j.interval_x.upper, j.interval_y.upper))
+                j = algorithm.convert_closed_to_my_closed(j)
+                j = WallCut().wall_uncut(j)
                 q,j = algo.wall_into_tree(q), algo.wall_into_tree(j)
-                j, q, Q, tree, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, tree2D_xy, iD, iD2, id_list, tree2D_where_interval)
+                j, q, Q, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, iD, iD2, id_list, tree2D_where_interval)
 
             elif algo.condition2D_yz(q, tree2D_yz, tree2D_where_interval):
                 j = algo.get_first_tree_object([q.interval_y, q.interval_z], tree2D_yz, 2)
-                j = WallCut().wall_uncut(j)
+                q = WallCut().wall_uncut(q)
                 tree2D_yz.tree.delete(j.iD, (j.interval_y.lower, j.interval_z.lower, j.interval_y.upper, j.interval_z.upper))
-                j, q, Q, tree, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, tree2D_yz, iD, iD2, id_list, tree2D_where_interval)
+                j = algorithm.convert_closed_to_my_closed(j)
+                j = WallCut().wall_uncut(j)
+                q,j = algo.wall_into_tree(q), algo.wall_into_tree(j)
+                j, q, Q, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, iD, iD2, id_list, tree2D_where_interval)
 
             elif algo.condition2D_xz(q, tree2D_xz, tree2D_where_interval):
                 j = algo.get_first_tree_object([q.interval_x, q.interval_z], tree2D_xz, 2)
-                j = WallCut().wall_uncut(j)
+                q = WallCut().wall_uncut(q)
                 tree2D_xz.tree.delete(j.iD, (j.interval_x.lower, j.interval_z.lower, j.interval_x.upper, j.interval_z.upper))
-                j, q, Q, tree, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, tree2D_xz, iD, iD2, id_list, tree2D_where_interval)
+                j = algorithm.convert_closed_to_my_closed(j)
+                j = WallCut().wall_uncut(j)
+                q, j = algo.wall_into_tree(q), algo.wall_into_tree(j)
+                j, q, Q, inter, iD, iD2, id_list = algo.sub_algo_2D(q, j, Q, iD, iD2, id_list, tree2D_where_interval)
 
             else:
                 if sum([q.is_empty_x, q.is_empty_y, q.is_empty_z]) >= 2:
                     res_stack.append(q)
 
                 if not q.is_wall:
+                    q = my_int.box_cut(q)
                     q = box3D(q.interval_x, q.interval_y, q.interval_z, max(id_list[0]) + 1)
                     id_list[0].append(max(id_list[0]) + 1)
                     tree3D.tree.add(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
                     iD = max(id_list[0]) + 1
 
                 else:
-                    q = WallCut().wall_cut(q)
                     q = box3D(q.interval_x, q.interval_y, q.interval_z, max(id_list[1]) + 1)
                     id_list[1].append(max(id_list[1]) + 1)
                     val = algo.dictionary_update_val(q)
                     iD2 = max(id_list[1]) + 1
                     tree2D_where_interval.update(val)
                     q, tree2D_xy, tree2D_yz, tree2D_xz  = algo.add_to_tree(iD2, q, tree2D_xy, tree2D_yz, tree2D_xz)
-        return tree3D, tree2D_xy, tree2D_yz, tree2D_xz, res_stack
+        return tree3D, tree2D_xy, tree2D_yz, tree2D_xz, tree2D_where_interval
 
+###PROBLEM Z OCIOSANIEM PUDEŁEK

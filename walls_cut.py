@@ -21,8 +21,7 @@ class WallCut:
         return box3D(res[0], res[1], res[2], wall.iD)
 
     def wall_cut_execute(self, inter):
-        eps = 1e-7
-        inter = my_closed(inter.lower - eps, inter.upper + eps) if not mylen(inter) == 0 else inter
+        inter = my_closed(inter.lower_eps, inter.upper_meps) if not mylen(inter) == 0 else inter
         return inter
 
     def signat_reverse(self, signat):
@@ -146,9 +145,8 @@ class WallCut:
         walls = [[self.wall_uncut_execute(walls[0]), self.wall_uncut_execute(walls[1])],
                  [self.wall_uncut_execute(walls[2]), self.wall_uncut_execute(walls[3])]]
         walls_temp = rozbij2D_dict[tuple(signat)]([[walls[0][0], walls[0][1]]], [[walls[1][0], walls[1][1]]])
-        walls_res = [box3D(wall[0][0], wall[0][1], third_inter) for wall in walls_temp]
+        walls_res = [box3D(wall[0], wall[1], third_inter) for wall in walls_temp[0]]
         return walls_res
-
 
     def get_signatures_double(self, wall1, wall2):
         wall1, wall2 = self.wall_uncut(wall1), self.wall_uncut(wall2)
@@ -164,7 +162,6 @@ class WallCut:
             else:
                 signatures_res.append(sign.get_signature(wall1[i], wall2[i]))
         return signatures_res
-
 
     def iI_II_iI_II(self, wall1, wall2):
         res = [[[wall1[0][0] | wall2[0][0], wall1[0][1] | wall2[0][1]]]]

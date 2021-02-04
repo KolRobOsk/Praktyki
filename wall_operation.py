@@ -12,7 +12,6 @@ class WallOperations:
         wall2 = box3D.factory(box[0], box[1], box[4].lower, box[2], box[3], box[4].upper, box[5])
         walls_temp = self.split_walls([wall1, wall2])
         for wall in walls_temp:
-            print(wall.interval_x, wall.interval_y, wall.interval_z)
             if not wall.is_wall:
                 walls_res.append(myint.box_cut(box3D(wall.interval_x, wall.interval_y, wall.interval_z, max(iD_list[0]) + 1)))
                 iD_list[0].append(max(iD_list[0]) + 1)
@@ -86,11 +85,10 @@ class WallOperations:
         return True if box3D(walls[0][0], walls[0][1], walls[0][2]).is_wall and box3D(walls[1][0], walls[1][1], walls[1][2]).is_wall else False
 
     def single_split_2D(self, i, sign_list, third_inter, walls, both_walls):
-        ###POTENCJALNIE TUTAJ BŁĄD###
         wall_obj = WallCut()
-        if sign_list[i] != 'not intersect' and both_walls:
+        if any([mylen(third_inter[0]) == 0, mylen(third_inter[1]) == 0]) and both_walls:
             return [wall_obj.split_2D(sign_list, third_inter[0], [walls[0], walls[1], walls[2], walls[3]])]
-        elif sign_list[i] != 'not intersect' and not both_walls:
+        elif any([mylen(third_inter[0]) == 0, mylen(third_inter[1]) == 0]) and not both_walls:
             return [wall_obj.split_2D_3D(sign_list, third_inter, [walls[0], walls[1], walls[2], walls[3]])]
         else:
             return []

@@ -206,8 +206,6 @@ class myInterval(portion.Interval):
         left = left if lower not in [inf, -inf] else portion.Bound.OPEN
         right = right if upper not in [inf, -inf] else portion.const.Bound.OPEN
         instance._intervals = [Atomic(left, lower, upper, right)]
-        #if instance.empty:
-        #    return myInterval()
         return instance
 
 def my_closed(lower, upper):

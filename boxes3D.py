@@ -1,5 +1,5 @@
 import rtree
-from cut_box import box3D
+from cut_box import *
 
 class boxStack:
     '''
@@ -79,10 +79,13 @@ class tree:
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-        boxes = self.tree.intersection(self.tree.get_bounds(), True)
-        boxes = [item.bbox for item in boxes]
-        boxes = [box3D.factory(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3])), int(round(item[4])), int(round(item[5]))) for item in boxes]
-        return boxes
+        try:
+            boxes = self.tree.intersection(self.tree.get_bounds(), True)
+            boxes = [item.bbox for item in boxes]
+            boxes = [box3D.factory(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3])), int(round(item[4])), int(round(item[5]))) for item in boxes]
+            return boxes
+        except:
+            return []
 
 class tree2D_xy(tree):
     def __init__(self):
@@ -91,18 +94,23 @@ class tree2D_xy(tree):
         self.properties.dimension = 2
         self.tree = rtree.index.Index('2d_index_xy', properties=self.properties)
 
-
     def ret_boxes(self, dictionary=None):
         '''
     	Funkcja zwracająca pudełka w drzewie
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-        boxes = self.tree.intersection(self.tree.get_bounds(), True)
-        boxes = [item.bbox for item in boxes]
-        boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
-        return boxes
-
+        try:
+            boxes = list(self.tree.intersection(self.tree.get_bounds(), True))
+            boxes = [[item.object.interval_x.lower, item.object.interval_y.lower, item.object.interval_x.upper,
+                      item.object.interval_y.upper, str(item.object.iD)] for item in boxes]
+            if dictionary:
+                boxes = [box3D(my_closed(round(item[0]), round(item[2])), my_closed(round(item[1]), round(item[3])), dictionary[item[4]]) for item in boxes]
+            else:
+                boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
+            return boxes
+        except:
+            return []
 
 class tree2D_xz(tree):
     def __init__(self):
@@ -118,10 +126,17 @@ class tree2D_xz(tree):
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-        boxes = self.tree.intersection(self.tree.get_bounds(), True)
-        boxes = [item.bbox for item in boxes]
-        boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
-        return boxes
+        try:
+            boxes = list(self.tree.intersection(self.tree.get_bounds(), True))
+            boxes = [[item.object.interval_x.lower, item.object.interval_z.lower, item.object.interval_x.upper,
+                      item.object.interval_z.upper, str(item.object.iD)] for item in boxes]
+            if dictionary:
+                boxes = [box3D(my_closed(round(item[0]), round(item[2])), dictionary[item[4]], my_closed(round(item[1]), round(item[3]))) for item in boxes]
+            else:
+                boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
+            return boxes
+        except:
+            return []
 
 class tree2D_yz(tree):
     def __init__(self):
@@ -131,14 +146,20 @@ class tree2D_yz(tree):
         self.tree = rtree.index.Index('2d_index_yz', properties=self.properties)
 
 
-    def ret_boxes(self):
+    def ret_boxes(self, dictionary=None):
         '''
     	Funkcja zwracająca pudełka w drzewie
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-        boxes = self.tree.intersection(self.tree.get_bounds(), True)
-        boxes = [item.bbox for item in boxes]
-        boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
-        return boxes
-
+        try:
+            boxes = list(self.tree.intersection(self.tree.get_bounds(), True))
+            boxes = [[item.object.interval_y.lower, item.object.interval_z.lower, item.object.interval_y.upper,
+                      item.object.interval_z.upper, str(item.object.iD)] for item in boxes]
+            if dictionary:
+                boxes = [box3D(dictionary[item[4]], my_closed(round(item[0]), round(item[2])), my_closed(round(item[1]), round(item[3]))) for item in boxes]
+            else:
+                boxes = [box3D.factory2D(int(round(item[0])), int(round(item[1])), int(round(item[2])), int(round(item[3]))) for item in boxes]
+            return boxes
+        except:
+            return []

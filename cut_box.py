@@ -319,8 +319,9 @@ class box3D:
         '''
         x = self.get_interval_x()
         y = self.get_interval_y()
-        lista = [x.lower, x.upper, y.lower, y.upper]
-        intervals = '[' + str(lista[0]) + ',' + str(lista[1]) + ']' + ' x ' + '[' + str(lista[2]) + ',' + str(lista[3]) + ']' + '\n'
+        z = self.get_interval_z()
+        lista = [x.lower, x.upper, y.lower, y.upper, z.lower, z.upper]
+        intervals = '[' + str(lista[0]) + ',' + str(lista[1]) + ']' + ' x ' + '[' + str(lista[2]) + ',' + str(lista[3]) + ']' + ' x ' + '[' + str(lista[4]) + ',' + str(lista[5]) + ']' + '\n'
         return intervals
 
     @staticmethod

@@ -4,10 +4,16 @@ class WallCut:
 
     def wall_uncut(self, wall):
         res = []
-        for i in [wall.interval_x, wall.interval_y, wall.interval_z]:
-            i = self.wall_uncut_execute(i)
-            res.append(i)
-        return box3D(res[0], res[1], res[2], wall.iD)
+        if isinstance(wall, tuple):
+            for i in [wall[0].interval_x, wall[0].interval_y, wall[0].interval_z]:
+                i = self.wall_uncut_execute(i)
+                res.append(i)
+            return box3D(res[0], res[1], res[2], wall[0].iD)
+        else:
+            for i in [wall.interval_x, wall.interval_y, wall.interval_z]:
+                i = self.wall_uncut_execute(i)
+                res.append(i)
+            return box3D(res[0], res[1], res[2], wall.iD)
 
     def wall_uncut_execute(self, inter):
         inter = my_closed(round(inter.lower), round(inter.upper)) if not mylen(inter) == 0 else inter
@@ -145,7 +151,7 @@ class WallCut:
         walls = [[self.wall_uncut_execute(walls[0]), self.wall_uncut_execute(walls[1])],
                  [self.wall_uncut_execute(walls[2]), self.wall_uncut_execute(walls[3])]]
         walls_temp = rozbij2D_dict[tuple(signat)]([[walls[0][0], walls[0][1]]], [[walls[1][0], walls[1][1]]])
-        walls_res = [box3D(wall[0], wall[1], third_inter) for wall in walls_temp[0]]
+        walls_res = [[wall[0], wall[1]] for wall in walls_temp[0]][0]
         return walls_res
 
     def get_signatures_double(self, wall1, wall2):

@@ -11,10 +11,9 @@ except:
     pass
 
 #deklaracja tablicy zawierającej pudełka na wejściu do algorytmu
-table.extend([box3D.factory(1, 1, 3, 7, 9, 3)])
-table.extend([box3D.factory(1, 1, 3, 7, 8, 3)])
-table.extend([box3D.factory(1, 2, 3, 9, 9, 5)])
-table.extend([box3D.factory(0, 0, 3, 2, 5, 3)])
+table.extend([box3D.factory(9, 1, 3, 9, 5, 9)])
+table.extend([box3D.factory(9, 0, 4, 9, 2, 7)])
+table.extend([box3D.factory(9, 1, 6, 14, 5, 6)])
 
 #tworzenie pudełek (funkcja factory ma kolejność współrzędnych x_lower y_lower z_lower x_upper, y_upper, z_upper)
 #w kolejności x_lower, y_lower, z_lower, x_upper, y_upper, z_upper
@@ -23,10 +22,9 @@ for box in table.get_stack():
     print(box.interval_x, box.interval_y, box.interval_z)
 drzewo3D,  drzewo2D_xy,  drzewo2D_yz,  drzewo2D_xz = tree(), tree2D_xy(), tree2D_yz(), tree2D_xz()
 #wypisywanie pudełek przed wstawieniem ich do drzewa
-_, _, _, _, dictionary = algorithm.algorytm(table, drzewo3D, drzewo2D_xy,  drzewo2D_yz,  drzewo2D_xz)
+drzewo3D, drzewo2D_xy, drzewo2D_yz, drzewo2D_xz, dictionary = algorithm.algorytm(table, drzewo3D, drzewo2D_xy,  drzewo2D_yz,  drzewo2D_xz)
 #uruchomienie funkcji execute i rozbicie pudełek
 ktore = 0
-
 
 for box in drzewo3D.ret_boxes():
     print('Obiekt {ktore}: Pudełko wyjściowe'.format(ktore=ktore + 1))
@@ -38,15 +36,13 @@ for box in drzewo2D_xy.ret_boxes(dictionary):
     print(box.interval_x, box.interval_y, box.interval_z)
     ktore += 1
 
-'''
-for box in drzewo2D_yz.ret_boxes2D():
-    print('Ścianka wyjściowa {}'.format(ktore + 1))
+for box in drzewo2D_yz.ret_boxes(dictionary):
+    print('Obiekt {ktore}: Ścianka wyjściowa'.format(ktore=ktore + 1))
     print(box)
     ktore += 1
 
-for box in drzewo2D_xz.ret_boxes2D():
-    print('Ścianka wyjściowa {}'.format(ktore + 1))
+for box in drzewo2D_xz.ret_boxes(dictionary):
+    print('Obiekt {ktore}: Ścianka wyjściowa'.format(ktore=ktore + 1))
     print(box)
     ktore += 1
 
-'''

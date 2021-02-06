@@ -4,7 +4,6 @@ from collections import namedtuple
 import random
 import math
 
-
 Atomic = namedtuple('Atomic', ['left', 'lower', 'upper', 'right'])
 
 def mylen(interval):

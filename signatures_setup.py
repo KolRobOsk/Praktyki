@@ -1,4 +1,5 @@
-from split_intervals import *
+from split_intervals_3D import *
+from cut_box_2D import *
 
 class signatures:
 
@@ -64,6 +65,25 @@ class signatures:
         x1, y1, z1, x2, y2, z2 = box1.interval_x, box1.interval_y, box1.interval_z, box2.interval_x, box2.interval_y, box2.interval_z
         signatures = [self.get_signature(x1, x2), self.get_signature(y1, y2), self.get_signature(z1, z2)]
         return signatures
+
+    def get_signatures_double(self, wall1, wall2):
+        signatures_res, cut = [], myInterval()
+        wall1, wall2, sign = cut.wall_uncut(wall1), cut.wall_uncut(wall2), signatures()
+        wall1, wall2 = [wall1.interval_x, wall1.interval_y, wall1.interval_z], [wall2.interval_x, wall2.interval_y, wall2.interval_z]
+        where_equal = self.check_if_box_2D_equal_and_in(wall1, wall2)
+        for i in range(len(wall1)):
+            signatures_res.append(sign.get_signature(wall1[i], wall2[i]))
+        return signatures_res, where_equal
+
+    def check_if_box_2D_equal_and_in(self, wall1, wall2):
+        try:
+            where_equal = [self.ie(wall1[0], wall2[0]), self.ie(wall1[1], wall2[1]), self.ie(wall1[2], wall2[2])].index(
+                True)
+            where_in = [self.ii21(wall1[0], wall2[0]), self.ii21(wall1[1], wall2[1]), self.ii21(wall1[2], wall2[2])].index(
+                True)
+        except:
+            where_equal = where_in = None
+        return where_equal
 
     def sort_signatures(self, box1, box2, in2sorted):
         '''
@@ -218,11 +238,3 @@ class signatures:
             perm = self.permute_signatures(j, sorted2in)
             table.append(box3D(perm[0], perm[1], perm[2]))
         return table
-
-    @staticmethod
-    def intersection2D(box, boxlist):
-        sign, boxes_res = signatures(), []
-        for i in boxlist:
-            if not all(sign.is_separate(box.interval_x, i.interval_x), sign.is_separate(box.interval_y, i.interval_y), sign.is_separate(box.interval_z, i.interval_z)):
-                boxes_res.append(i)
-        return boxes_res

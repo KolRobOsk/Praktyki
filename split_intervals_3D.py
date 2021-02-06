@@ -1,15 +1,12 @@
-import portion
-import math
-from cut_box import *
+from cut_box_3D import *
 
-class split:
+class split_3D:
     '''
     Klasa dzieląca pudełka \n
     zawiera ona 20 funkcji, z których każda rozbija pudełka \n
     Uwzględniłem możliwość wystąpienia half-out \n
     :param empty: interwał pusty 
     '''
-
 
     def oI_II_oI_II_oI_II(self, box1, box2):
         x1, y1, z1 = my_closed(box1.interval_x.lower, box1.interval_x.upper), \

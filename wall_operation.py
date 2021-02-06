@@ -1,50 +1,25 @@
-from signatures_setup import *
-from boxes3D import *
-from split_intervals import mylen
+from boxes_3D import *
+from split_intervals_3D import mylen
 from walls_cut import *
 
 
 class WallOperations:
 
-    def split_boxes(self, wall, box, iD_list, iD, iD2):
-        both_walls = True if self.are_both_walls([wall, box]) else False
+    def split_boxes(self, wall1, wall2, iD_list):
         wall_cut_obj, sign, walls_res, myint = WallCut(), signatures(), [], myInterval()
-        wall1 = box3D.factory(wall[0], wall[1], wall[4].lower, wall[2], wall[3], wall[4].upper, wall[5])
-        wall2 = box3D.factory(box[0], box[1], box[4].lower, box[2], box[3], box[4].upper, box[5])
-        walls_temp = self.split_walls([wall1, wall2], both_walls)
+        walls_temp = self.split_walls(wall1, wall2)
         for wall in walls_temp:
-            if not wall.is_wall:
-                walls_res.append(myint.box_cut(box3D(wall.interval_x, wall.interval_y, wall.interval_z, max(iD_list[0]) + 1)))
-                iD_list[0].append(max(iD_list[0]) + 1)
-                iD = max(iD_list[1]) + 1
-            else:
-                walls_res.append(box3D(wall.interval_x, wall.interval_y, wall.interval_z, max(iD_list[1]) + 1))
-                iD_list[1].append(iD2)
-                iD2 = max(iD_list[1]) + 1
-        return walls_res, iD_list, iD, iD2
+            walls_res.append(myint.box_cut([wall[0], wall[1], max(iD_list[0]) + 1]))
+            iD_list[1].append(max(iD_list[0]) + 1)
+        return walls_res, iD_list
 
-    def empty_deleter_2D(self, signat, walls):
-        where = None
-        walls = [[walls[0].interval_x, walls[0].interval_y, walls[0].interval_z], [walls[1].interval_x, walls[1].interval_y, walls[1].interval_z]]
-        third_intervals = [[],[]]
-        for sign in range(len(signat)):
-            if signat[sign] == 'not intersect':
-                third_intervals[0].append(walls[0].pop(sign))
-                third_intervals[1].append(walls[1].pop(sign))
-                signat.pop(sign)
-                where = sign
-        return walls, signat, third_intervals, where
-
-    def split_walls(self, walls, both_walls):
-        walls_temp_2, sign, walls_res, signature_list = [], signatures(), [], WallCut().get_signatures_double(walls[0], walls[1])
-        walls, signat, third_intervals, where_third_interval = self.empty_deleter_2D(signature_list, walls)
+    def split_walls(self, wall1, wall2, both_walls):
+        walls_temp_2, sign, walls_res, signature_list = [], signatures(), [], WallCut().get_signatures_double(wall1, wall2)
         sorted_sign, in2sorted, sorted2in = sign.my_sort(signature_list)
-        temp_1, temp_2 = walls[0], walls[1]
-        walls_temp = self.multi_split_2D(sorted_sign, [temp_1, temp_2], third_intervals, both_walls)
+        walls_temp = self.multi_split_2D(sorted_sign, [wall1, wall2], both_walls)
         for wall in walls_temp:
             temp = sign.permute([wall[0], wall[1]], sorted2in)
-            temp.insert(where_third_interval, third_intervals[0][0])
-            walls_temp_2.append(box3D(temp[0], temp[1], temp[2]))
+            walls_res.append([temp[0], temp[1]])
         return walls_res
 
     def into_wall(self, box1, box2):

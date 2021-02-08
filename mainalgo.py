@@ -3,8 +3,9 @@ sys.path.insert(0, os.path.abspath('.'))
 from signatures_setup import *
 from split_intervals_3D import *
 from split_intervals_2D import *
-from cut_box import *
-from wall_operation import *
+from cut_box_3D import *
+from cut_box_2D import *
+from different_boxtype_operations import *
 from boxes_3D import *
 from boxes_2D import *
 
@@ -30,12 +31,9 @@ class algorithm:
 
     def get_first_tree_object(self, q, tree_temp, dimensions):
         if dimensions == 3:
-            try:
-                i = list(tree_temp.tree.intersection((q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper,
-                                             q.interval_y.upper, q.interval_z.upper), objects=True))[0]
-                return i.object
-            except:
-                return None
+            i = list(tree_temp.tree.intersection((q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper,
+                                         q.interval_y.upper, q.interval_z.upper), objects=True))[0]
+            return i.object
         elif dimensions == 2:
             temp = list(tree_temp.tree.intersection((q[0].lower, q[1].lower, q[0].upper, q[1].upper), objects=True))[0]
             return temp.object
@@ -63,24 +61,27 @@ class algorithm:
         my_closed_box = box3D(my_closed(closed_b.interval_x.lower, closed_b.interval_x.upper), my_closed(closed_b.interval_y.lower, closed_b.interval_y.upper), my_closed(closed_b.interval_z.lower, closed_b.interval_z.upper), closed_b.iD)
         return my_closed_box
 
-    def quicksort_boxes_walls(self, q):
+    def quicksort_boxes_walls(self, q, iD):
         if q.is_empty_x:
-            q = ['wx', q.interval_x, [q.interval_y, q.interval_z]]
+            q = ['wx', q.interval_x, [q.interval_y, q.interval_z, iD]]
         elif q.is_empty_y:
-            q = ['wy', q.interval_y, [q.interval_x, q.interval_z]]
+            q = ['wy', q.interval_y, [q.interval_x, q.interval_z, iD]]
         elif q.is_empty_z:
-            q = ['wz', q.interval_z, [q.interval_x, q.interval_y]]
+            q = ['wz', q.interval_z, [q.interval_x, q.interval_y, iD]]
         return q
 
     def quicksort_boxes(self, Q):
-        Q_temp, Q_res = [], {'b': [], 'wx': [], 'wy': [], 'wz': [],}
+        Q_temp, Q_res, iD = [], {'b': [], 'wx': [], 'wy': [], 'wz': []}, 0
         for q in Q.get_stack():
             if not q.is_wall:
+                q = box3D(q.interval_x, q.interval_y, q.interval_z, iD)
+                iD += 1
                 Q_res['b'].append(q)
             elif q.is_wall:
-                Q_temp = self.quicksort_boxes_walls(q)
+                Q_temp = self.quicksort_boxes_walls(q, iD)
+                iD += 1
                 Q_res[Q_temp[0]].append([Q_temp[1], Q_temp[2]])
-        return Q_res
+        return Q_res, iD
 
     @staticmethod
     def execute(box_list):
@@ -112,8 +113,9 @@ class algorithm:
         tree2D_where_interval = {}
         #zmienna potrzebna do wprowadzania pudełka w unikalne miejsce do drzewa
         id_list = [[0], [0]]
-        algo, oper, stack_res = algorithm(), WallOperations(), boxStack()
-        Q, Q_res = algo.quicksort_boxes(Q), {}
+        algo, oper, stack_res = algorithm(), boxOperations(), boxStack()
+        Q, iD = algo.quicksort_boxes(Q)
+        Q_res, x, y, z = {}, [], [], []
         #pętla działa dopóki stos nie zostanie pusty
         are_walls_split = False if sum([len(Q['wx']) > 0, len(Q['wy']) > 0, len(Q['wz']) > 0]) > 0 else True
         are_boxes_split = False if len(Q['b']) > 0 else True
@@ -126,68 +128,62 @@ class algorithm:
                 zaś wynik rozbicia zostaje wstawiony ponownie na stos pudełek
                 '''
                 q = Q['b'].pop()
+                q = my_int.box_cut(q)
                 if drzewo3D.tree.count((q.interval_x.lower,  q.interval_y.lower, q.interval_z.lower,
                                         q.interval_x.upper, q.interval_y.upper,  q.interval_z.upper)) > 0:
-                    inter = algo.get_first_tree_object(q, drzewo3D, 3)
-                    j = box3D(inter.interval_x, inter.interval_y, inter.interval_z, inter.iD)
-                    drzewo3D.tree.delete(q.iD, (j.interval_x.lower, j.interval_y.lower, j.interval_z.lower, j.interval_x.upper, j.interval_y.upper, j.interval_z.upper))
-                    j = WallCut().wall_uncut(j)
+                    j = algo.get_first_tree_object(q, drzewo3D, 3)
+                    j = box3D(j.interval_x, j.interval_y, j.interval_z, j.iD)
+                    drzewo3D.tree.delete(j.iD, (j.interval_x.lower, j.interval_y.lower, j.interval_z.lower, j.interval_x.upper, j.interval_y.upper, j.interval_z.upper))
                     q, j = my_int.box_uncut(q), my_int.box_uncut(j)
-                    boxes = [my_int.box_uncut(box) for box in
-                             algorithm().rotate_and_execute(q, j, id_list)]
-                    Q['b'].extend(boxes)
+                    Q['b'].extend(oper.rotate_and_execute(q, j, iD))
                 else:
-                    drzewo3D.tree.add(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
+                    drzewo3D.tree.insert(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_z.lower, q.interval_x.upper, q.interval_y.upper, q.interval_z.upper), q)
                 if len(Q['b']) == 0:
                     are_boxes_split = True
-                    Q['b'] = drzewo3D.tree.ret_boxes()
+                    Q['b'] = drzewo3D.ret_boxes()
             elif are_walls_split:
-                x, y, z = [], [], []
                 for wall in ['wx', 'wy', 'wz']:
                     q = Q[wall].pop()
                     while not len(Q[wall]) == 0:
                         if wall == 'wx':
                             if drzewo2D.tree.count(q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper):
-                                inter = algo.get_first_tree_object(q, drzewo2D, 3)
+                                inter = algo.get_first_tree_object(q, drzewo2D, 2)
                                 j, j_iD = [inter.interval_y, inter.interval_z], inter.iD
-                                drzewo2D[wall].extend(algo.rotate_and_execute2D(q, j, drzewo2D))
+                                drzewo2D[wall].extend(oper.rotate_and_execute2D(q, j, drzewo2D))
                                 drzewo2D.tree.delete(j_iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper))
                             else:
-                                drzewo2D.tree.add(q.iD, (
-                                q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper))
+                                drzewo2D.tree.add(q.iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper))
                             if len(Q[wall]) == 0:
                                 x = drzewo2D.ret_boxes()
                                 drzewo2D = tree2D()
                         elif wall == 'wy':
                             if drzewo2D.tree.count(q.interval_x.lower, q.interval_z.lower, q.interval_x.upper,
                                                            q.interval_z.upper):
-                                inter = algo.get_first_tree_object(q, drzewo2D, 3)
+                                inter = algo.get_first_tree_object(q, drzewo2D, 2)
                                 j, j_iD = [inter.interval_x, inter.interval_z], inter.iD
-                                tree2D[wall].extend(algo.rotate_and_execute2D(q, j, drzewo2D))
+                                Q[wall].extend(oper.rotate_and_execute2D(q, j, drzewo2D))
                                 drzewo2D.tree.delete(j_iD, (q.interval_x.lower, q.interval_z.lower, q.interval_x.upper, q.interval_z.upper))
                             else:
-                                tree2D.tree.add(q.iD, (
+                                drzewo2D.tree.add(q.iD, (
                                 q.interval_x.lower, q.interval_z.lower, q.interval_x.upper, q.interval_z.upper))
-                            if Q[wall].empty:
+                            if len(Q[wall]) == 0:
                                 y = drzewo2D.ret_boxes()
                                 drzewo2D = tree2D()
 
                         elif wall == 'wz':
                             if drzewo2D.tree.count(q.interval_x.lower, q.interval_y.lower, q.interval_x.upper,
                                                            q.interval_y.upper):
-                                inter = algo.get_first_tree_object(q, drzewo2D, 3)
+                                inter = algo.get_first_tree_object(q, drzewo2D, 2)
                                 j, j_iD = [inter.interval_x, inter.interval_y], inter.iD
-                                tree2D[wall].extend(algo.rotate_and_execute2D(q, j, drzewo2D))
+                                tree2D[wall].extend(oper.rotate_and_execute2D(q, j, drzewo2D))
                                 drzewo2D.tree.delete(j_iD, (q.interval_x.lower, q.interval_y.lower, q.interval_y.upper, q.interval_z.upper))
                             else:
                                 tree2D.tree.add(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_x.upper, q.interval_y.upper))
-                            if Q[wall].empty:
-
+                            if len(Q[wall]) == 0:
                                 z = drzewo2D.ret_boxes()
                                 drzewo2D = tree2D()
         Q['wx'].extend(x)
         Q['wy'].extend(y)
         Q['wz'].extend(z)
-
         return Q
 

@@ -85,7 +85,7 @@ class signatures:
             where_equal = where_in = None
         return where_equal
 
-    def sort_signatures(self, box1, box2, in2sorted):
+    def sort_by_signatures(self, box1, box2, in2sorted):
         '''
         Funkcja przygotowująca pudełka do posortowania interwałów\n
         :param box1: pierwsze pudełko z nieposortowanymi interwałami\n
@@ -224,7 +224,7 @@ class signatures:
             return 'ii12'
 
 
-    def ret_original_order(self, split, sorted2in):
+    def ret_original_order(self, split, sorted2in, iD):
         '''
         Funkcja przywracająca oryginalny porządek interwałów\n
         :param split: lista posortowanych interwałów\n
@@ -236,5 +236,6 @@ class signatures:
         for i in split:
             j = [i.interval_x, i.interval_y, i.interval_z]
             perm = self.permute_signatures(j, sorted2in)
-            table.append(box3D(perm[0], perm[1], perm[2]))
+            table.append(box3D(perm[0], perm[1], perm[2], iD))
+            iD += 1
         return table

@@ -20,9 +20,10 @@ table.extend([box3D.factory(9, 1, 5, 14, 5, 6)])
 print('Pudełka wejściowe:')
 for box in table.get_stack():
     print(box.interval_x, box.interval_y, box.interval_z)
+print('--------------------------------')
 drzewo3D,  drzewo2D = tree(), tree2D()
 #wypisywanie pudełek przed wstawieniem ich do drzewa
-drzewo3D, drzewo2D, dictionary = algorithm.algorytm(table, drzewo3D, drzewo2D)
+dictionary = algorithm.algorytm(table, drzewo3D, drzewo2D)
 #uruchomienie funkcji execute i rozbicie pudełek
 ktore = 0
 

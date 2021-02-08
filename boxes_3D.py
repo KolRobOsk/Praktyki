@@ -1,5 +1,5 @@
 import rtree
-from cut_box import *
+from cut_box_3D import *
 
 class boxStack:
     '''

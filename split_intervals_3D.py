@@ -337,6 +337,5 @@ class split_3D:
                        ('io21', 'io21', 'io21'): self.oII_I_oII_I_oII_I,
                        ('ii12', 'ii12', 'ii12'): self.iI_II_iI_II_iI_II,
                        ('ii21', 'ii21', 'ii21'): self.iII_I_iII_I_iII_I}
-
         split = rozbij_dict[idx_sign](box1, box2)
         return split

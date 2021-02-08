@@ -5,7 +5,7 @@ class tree2D(tree):
         '''Tworzenie drzewa'''
         self.properties = rtree.index.Property()
         self.properties.dimension = 2
-        self.tree = rtree.index.Index('2d_index_yz', properties=self.properties)
+        self.tree = rtree.index.Index('2d_index', properties=self.properties)
 
 
     def ret_boxes(self, dictionary=None):

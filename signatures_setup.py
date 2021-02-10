@@ -238,4 +238,4 @@ class signatures:
             perm = self.permute_signatures(j, sorted2in)
             table.append(box3D(perm[0], perm[1], perm[2], iD))
             iD += 1
-        return table
+        return table, iD

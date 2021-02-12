@@ -5,6 +5,10 @@ from signatures_setup import *
 
 class WallCut:
 
+    def check_if_walls_intersect(self, wall1, wall2):
+        sign, x1, y1, z1, x2, y2, z2 = signatures(), wall1.interval_x, wall1.interval_y, wall1.interval_z, wall2.interval_x, wall2.interval_y, wall2.interval_z
+        return True if sum([sign.is_separate(x1, x2), sign.is_separate(y1, y2), sign.is_separate(z1, z2)]) == 0 else False
+
     def wall_uncut(self, wall):
         res = []
         for i in [wall.interval_x, wall.interval_y, wall.interval_z]:
@@ -44,7 +48,7 @@ class WallCut:
         walls_temp_2, sign, walls_res, signature_list = [], signatures(), [], WallCut().get_signatures_double(wall1, wall2)
         sorted_sign, in2sorted, sorted2in = sign.my_sort(signature_list)
         print(wall1)
-        walls_temp = self.split_2D(sorted_sign, [wall1[0], wall1[1], wall2[0], wall2[1]], both_walls)
+        walls_temp = self.split_2D(sorted_sign, [wall1[0], wall1[1], wall2[0], wall2[1]])
         for wall in walls_temp:
             temp = sign.permute([wall[0], wall[1]], sorted2in)
             walls_res.append([temp[0], temp[1]])

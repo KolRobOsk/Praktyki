@@ -64,6 +64,11 @@ class signatures:
         '''
         x1, y1, z1, x2, y2, z2 = box1.interval_x, box1.interval_y, box1.interval_z, box2.interval_x, box2.interval_y, box2.interval_z
         signatures = [self.get_signature(x1, x2), self.get_signature(y1, y2), self.get_signature(z1, z2)]
+        if sum([self.ie(x1, x2), self.ie(y1, y2), self.ie(z1, z2)]) > 0:
+            if sum([self.ii21(x1, x2), self.ii21(y1, y2), self.ii21(z1, z2)]) > sum([self.ii12(x1, x2), self.ii12(y1, y2), self.ii12(z1, z2)]):
+                for sign in signatures:
+                    if sign == 'ii12':
+                        sign = 'ii21'
         return signatures
 
     def get_signatures_double(self, wall1, wall2):

@@ -11,9 +11,9 @@ except:
     pass
 
 #deklaracja tablicy zawierającej pudełka na wejściu do algorytmu
-table.extend([box3D.factory(9, 1, 3, 10, 5, 9)])
-table.extend([box3D.factory(1, 0, 4, 9, 2, 7)])
-table.extend([box3D.factory(9, 1, 5, 11, 5, 6)])
+table.extend([box3D.factory(1, 1, 3, 10, 5, 9)])
+table.extend([box3D.factory(1, 1, 3, 10, 5, 9)])
+#table.extend([box3D.factory(1, 1, 5, 11, 5, 6)])
 
 #tworzenie pudełek (funkcja factory ma kolejność współrzędnych x_lower y_lower z_lower x_upper, y_upper, z_upper)
 #w kolejności x_lower, y_lower, z_lower, x_upper, y_upper, z_upper

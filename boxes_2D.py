@@ -1,4 +1,5 @@
 from boxes_3D import *
+from cut_box_2D import *
 
 class tree2D(tree):
     def __init__(self):
@@ -14,15 +15,17 @@ class tree2D(tree):
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-        try:
-            boxes = self.tree.intersection(self.tree.get_bounds(), True)
-            boxes = [item.object for item in boxes]
-            if mylen(boxes[0].interval_z) == 0:
-                boxes = [[box.interval_x, box.interval_y] for box in boxes]
-            elif mylen(boxes[0].interval_x) == 0:
-                boxes = [[box.interval_y, box.interval_y] for box in boxes]
-            elif mylen(boxes[0].interval_y) == 0:
-                boxes = [[box.interval_x, box.interval_z] for box in boxes]
-            return boxes
-        except:
-            return []
+
+        boxes = [box.object for box in list(self.tree.intersection(self.tree.get_bounds(), True))]
+        i, j, w_cut, boxes_res = 0, 0, WallCut(), []
+        while len(boxes) > 0:
+            for wall in ['wx', 'wy', 'wz']:
+                if boxes[i] == dictionary[wall][j].iD:
+                    i += 1
+                    print(w_cut.wall_uncut(dictionary[wall][j]))
+                    boxes.pop(i)
+                    boxes_res.append(w_cut.wall_uncut(dictionary[wall][j]))
+                    j = 0
+            j += 1
+        return boxes_res
+        

@@ -294,10 +294,8 @@ class split_3D:
         if (len(x) == 2):
             if not x[1].empty:
                 table.append(box3D(x[1], y2, z2))
-            if not x[0].empty:
-                table.append(box3D(x[0], y2, z2))
-        else:
-            table.append(box3D(x2 - x1, y2, z2))
+        if not x[0].empty:
+            table.append(box3D(x[0], y2, z2))
         return table
         
         

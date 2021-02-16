@@ -15,17 +15,20 @@ class tree2D(tree):
     	:return: pudełka znajdujące się w drzewie
     	:rtype: list
     	'''
-
-        boxes = [box.object for box in list(self.tree.intersection(self.tree.get_bounds(), True))]
-        i, j, w_cut, boxes_res = 0, 0, WallCut(), []
-        while len(boxes) > 0:
-            for wall in ['wx', 'wy', 'wz']:
-                if boxes[i] == dictionary[wall][j].iD:
-                    i += 1
-                    print(w_cut.wall_uncut(dictionary[wall][j]))
-                    boxes.pop(i)
-                    boxes_res.append(w_cut.wall_uncut(dictionary[wall][j]))
-                    j = 0
-            j += 1
-        return boxes_res
-        
+        if sum([len(dictionary['wx']) == 0, len(dictionary['wy']) == 0, len(dictionary['wz']) == 0]) < 3:
+            boxes = self.tree.intersection(self.tree.bounds, True)
+            boxes = [item.object for item in boxes]
+            j, w_cut, boxes_res = 0, WallCut(), []
+            while len(boxes) > 0:
+                for wall in ['wx', 'wy', 'wz']:
+                    if len(dictionary[wall]) > j:
+                        if boxes[0].iD == dictionary[wall][j].iD:
+                            boxes_res.append(w_cut.wall_uncut(dictionary[wall][j]))
+                            boxes.pop(0)
+                            j = 0
+                    else:
+                        continue
+                j += 1
+            return boxes_res
+        else:
+            return []

@@ -1,5 +1,4 @@
 from split_intervals_3D import *
-from cut_box_2D import *
 
 class signatures:
 
@@ -72,13 +71,11 @@ class signatures:
         return signatures
 
     def get_signatures_double(self, wall1, wall2):
-        signatures_res, cut = [], myInterval()
-        wall1, wall2, sign = cut.wall_uncut(wall1), cut.wall_uncut(wall2), signatures()
-        wall1, wall2 = [wall1.interval_x, wall1.interval_y, wall1.interval_z], [wall2.interval_x, wall2.interval_y, wall2.interval_z]
+        signatures_res = []
         where_equal = self.check_if_box_2D_equal_and_in(wall1, wall2)
         for i in range(len(wall1)):
-            signatures_res.append(sign.get_signature(wall1[i], wall2[i]))
-        return signatures_res, where_equal
+            signatures_res.append(self.get_signature(wall1[i], wall2[i]))
+        return signatures_res
 
     def check_if_box_2D_equal_and_in(self, wall1, wall2):
         try:
@@ -187,7 +184,7 @@ class signatures:
         :rtype: bool
         '''
         intersect = int1 & int2
-        return True if mylen(intersect) == 0 else False
+        return True if mylen(intersect) == 0 and int1 != int2 else False
 
     def is_half_out(self, int1, int2):
         '''

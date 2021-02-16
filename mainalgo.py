@@ -1,12 +1,6 @@
 import os, sys
 sys.path.insert(0, os.path.abspath('.'))
-from signatures_setup import *
-from split_intervals_3D import *
-from split_intervals_2D import *
-from cut_box_3D import *
-from cut_box_2D import *
 from different_boxtype_operations import *
-from boxes_3D import *
 from boxes_2D import *
 
 try:
@@ -29,14 +23,14 @@ class algorithm:
     Główna klasa programu.
     '''
 
-    def add_to_tree(self, q, tree2D):
+    def add_to_tree(self, q, drzewo2D):
         if q.is_empty_z:
-            tree2D.tree.insert(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_x.upper, q.interval_y.upper), q.iD)
+            drzewo2D.tree.insert(q.iD, (q.interval_x.lower, q.interval_y.lower, q.interval_x.upper, q.interval_y.upper), q)
         elif q.is_empty_y:
-            tree2D.tree.insert(q.iD, (q.interval_x.lower, q.interval_z.lower, q.interval_x.upper, q.interval_z.upper), q.iD)
+            drzewo2D.tree.insert(q.iD, (q.interval_x.lower, q.interval_z.lower, q.interval_x.upper, q.interval_z.upper), q)
         elif q.is_empty_x:
-            tree2D.tree.insert(q.iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper), q.iD)
-        return q, tree2D
+            drzewo2D.tree.insert(q.iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper), q)
+        return drzewo2D
 
     @staticmethod
     def convert_closed_to_my_closed(closed_b):
@@ -124,76 +118,85 @@ class algorithm:
                         are_boxes_split = True
                         Q_res['b'] = drzewo3D.ret_boxes()
             elif not are_walls_split:
-                i = 0
                 for wall in list_sign:
                     while len(Q[wall]) != 0:
                         q = Q[wall].pop()
-                        q = algo.convert_closed_to_my_closed(q)
-                        q = WallCut().wall_cut(q)
-                        if algo.check_if_intersect_2D_single(q, drzewo2D, Q_res, False, drzewo2D.ret_boxes()):
-                            Q = algorithm.sub_algo_2D(wall, drzewo2D, q, Q, Q_res)
+                        if algo.check_if_intersect_2D_single(q, drzewo2D.ret_boxes(Q_res)):
+                            j = algo.check_if_intersect_2D_single(q, drzewo2D.ret_boxes(Q_res))
+                            Q, drzewo2D, id_list = algo.sub_algo_2D(j, drzewo2D, q, Q, id_list)
+                            Q_res = algo.cut_out_dictionary_elem(Q_res, j)
                         else:
-                            Q_res[wall].append(q)
-                            algo.add_to_tree(q, drzewo2D)
+                            Q_res[algo.check_which_wall(q)].append(q)
+                            drzewo2D = algo.add_to_tree(q, drzewo2D)
                 are_walls_split = True
         return Q_res
 
     @staticmethod
-    def sub_algo_2D(wall, drzewo2D, q, Q, Q_res_wall):
-        j, Q_res_wall = algorithm().check_if_intersect_2D(q, drzewo2D, Q, Q_res_wall, True)
-        j, j_iD = algorithm.get_new_intervals_2D(j), j.iD
-        j_list = [WallCut.wall_uncut(wall) for wall in boxOperations().rotate_and_execute2D(q, j, drzewo2D)]
-        drzewo2D[wall].extend(j_list)
-        drzewo2D.tree.delete(j_iD, (q.interval_y.lower, q.interval_z.lower, q.interval_y.upper, q.interval_z.upper))
-        return Q_res_wall
+    def sub_algo_2D(j, drzewo2D, q, Q, iD_list):
+        algo, j_iD = algorithm(), j.iD
+        drzewo2D = algo.delete_from_tree(drzewo2D, j)
+        q, third_int_1, where_third = algorithm.get_new_intervals_2D(q)
+        j, third_int_2, where_third = algorithm.get_new_intervals_2D(j)
+        j_list, iD_list = boxOperations().rotate_and_execute2D(q, j, iD_list, [third_int_1, third_int_2])
+        for iter in j_list:
+            wall = algo.check_which_wall(iter)
+            Q[wall].append(iter)
+        return Q, drzewo2D, iD_list
+
+    def delete_from_tree(self, drzewo2D, j):
+        if j.is_empty_x:
+            drzewo2D.tree.delete(j.iD, (j.interval_y.lower, j.interval_z.lower, j.interval_y.upper, j.interval_z.upper))
+        elif j.is_empty_y:
+            drzewo2D.tree.delete(j.iD, (j.interval_x.lower, j.interval_z.lower, j.interval_x.upper, j.interval_z.upper))
+        elif j.is_empty_z:
+            drzewo2D.tree.delete(j.iD, (j.interval_x.lower, j.interval_y.lower, j.interval_x.upper, j.interval_y.upper))
+        return drzewo2D
 
     def cut_out_dictionary_elem(self, Q_res, j):
         if j.is_empty_x:
-            Q_res['wx'].remove(j)
+            wall = 'wx'
         elif j.is_empty_y:
-            Q_res['wy'].remove(j)
+            wall = 'wy'
         elif j.is_empty_z:
-            Q_res['wz'].remove(j)
-        return Q_res
+            wall = 'wz'
+        iterator = 0
+        for box in Q_res[wall]:
+            if sum([box.interval_x == j.interval_x, box.interval_y == j.interval_y, box.interval_z == j.interval_z]) == 3:
+                Q_res[wall].pop(iterator)
+                return Q_res
+            iterator += 1
 
-    def check_if_intersect_2D_single(self, q, drzewo2D, Q_res, ret=False, j=None):
-        if j == None:
-            j = drzewo2D.ret_boxes(Q_res)
-        j = [self.return_full_boxes(wall, Q_res) for wall in j]
+    def check_which_wall(self, j):
+        if j.is_empty_x:
+            return "wx"
+        if j.is_empty_y:
+            return "wy"
+        if j.is_empty_z:
+            return "wz"
+
+    def check_if_intersect_2D_single(self, q, j):
         wall_cut = WallCut()
         for box in j:
-            if ret:
-                if wall_cut.check_if_walls_intersect(q, box):
-                    Q_res = self.cut_out_dictionary_elem(Q_res, box)
-                    return box, Q_res
-                else:
-                    continue
+            if wall_cut.check_if_walls_intersect(q, box):
+                return box
             else:
-                if wall_cut.check_if_walls_intersect(q, box):
-                    return True
-                else:
-                    continue
+                continue
         return False
 
-    def return_full_boxes(self, j, Q_res):
+    def return_full_box(self, j, Q_res):
         ret, i = [], 0
         for wall in ['wx', 'wy', 'wz']:
             for box in Q_res[wall]:
-                if box == j.iD:
-                    ret.append(box3D(Q_res[wall][i].interval_x, Q_res[wall][i].interval_y, Q_res[wall][i].interval_z, Q_res[wall][i].iD))
-                    break
-        return ret
+                if box.iD == j.iD:
+                    return box
+        return None
 
-    def check_if_intersect_2D(self, q, drzewo2D, Q,  Q_res, ret):
-        j = drzewo2D.ret_boxes(Q_res)
-        temp, Q_res = self.check_if_intersect_2D_single(q, drzewo2D, Q, ret, j)
-        return temp, Q
 
     @staticmethod
     def get_new_intervals_2D(box):
         if box.is_empty_x:
-            return [box.interval_y, box.interval_z]
+            return [box.interval_y, box.interval_z], box.interval_x, 0
         elif box.is_empty_y:
-            return [box.interval_x, box.interval_z]
+            return [box.interval_x, box.interval_z], box.interval_y, 1
         elif box.is_empty_z:
-            return [box.interval_x, box.interval_y]
+            return [box.interval_x, box.interval_y], box.interval_z, 2

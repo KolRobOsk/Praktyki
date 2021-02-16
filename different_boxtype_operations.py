@@ -1,4 +1,3 @@
-from split_intervals_2D import *
 from cut_box_2D import *
 
 class boxOperations:
@@ -20,12 +19,12 @@ class boxOperations:
         return table, iD
 
 
-    def rotate_and_execute2D(self, wall1, wall2, iD_list):
+    def rotate_and_execute2D(self, wall1, wall2, iD_list, third_inter):
         wall_cut_obj, sign, walls_res, myint = WallCut(), signatures(), [], myInterval()
-        walls_temp = wall_cut_obj.split_walls(wall1, wall2)
+        walls_temp = wall_cut_obj.split_walls(wall1, wall2, third_inter)
         for wall in walls_temp:
-            walls_res.append(myint.box_cut([wall[0], wall[1], max(iD_list[0]) + 1]))
-            iD_list[1].append(max(iD_list[0]) + 1)
+            walls_res.append(box3D(wall[0], wall[1], wall[2], max(iD_list[1]) + 1))
+            iD_list[1].append(max(iD_list[1]) + 1)
         return walls_res, iD_list
 
     def execute2D_check(self, box_res, box_temp):

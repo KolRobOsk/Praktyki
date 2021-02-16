@@ -31,7 +31,6 @@ class myInterval(portion.Interval):
         super().__init__()
         self.eps = 1e-7
 
-
     @property
     def upper_eps(self):
         '''
@@ -150,6 +149,12 @@ class myInterval(portion.Interval):
         interval = my_closed(myInt.get_lower_eps, myInt.get_upper_meps) if not mylen(myInt) == 0 else myInt
         return interval
 
+    def cut_left(self, interval):
+        return my_closed(interval.lower_eps, interval.upper)
+
+    def cut_right(self, interval):
+        return my_closed(interval.lower, interval.upper_meps)
+
     def box_cut(self, box1):
         '''
         Funkcja przycinająca pudełko\n
@@ -232,9 +237,9 @@ class box3D:
         self.interval_y = interval_y
         self.interval_z = interval_z
         self.is_wall = True if sum([mylen(interval_x) == 0, mylen(interval_y) == 0, mylen(interval_z) == 0]) == 1 else False
-        self.is_empty_x = True if mylen(interval_x) == 0 else False
-        self.is_empty_y = True if mylen(interval_y) == 0 else False
-        self.is_empty_z = True if mylen(interval_z) == 0 else False
+        self.is_empty_x = True if mylen(self.interval_x) == 0 else False
+        self.is_empty_y = True if mylen(self.interval_y) == 0 else False
+        self.is_empty_z = True if mylen(self.interval_z) == 0 else False
         self.iD = iD
 
     def get_wall_xy(self, z):
@@ -244,7 +249,7 @@ class box3D:
         return box3D(self.interval_x, my_closed(y, y),  self.interval_z)
 
     def get_wall_yz(self, x):
-        return box3D( my_closed(x, x), self.interval_y, self.interval_z,)
+        return box3D(my_closed(x, x), self.interval_y, self.interval_z,)
 
     def get_interval_x(self):
         '''
@@ -352,18 +357,4 @@ class box3D:
         :rtype: box3D
         '''
         return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z1, z2), iD)
-
-    @staticmethod
-    def factory2D(x1, y1, x2, y2, z = 0, iD = None):
-        '''
-        metoda statyczna tworząca pudełko na podstawie interwałów\n
-        podanych w kolejności wszystkie lower, potem wszystkie upper\n
-        :param x1: wartość lower dla interwału na osi x\n
-        :param y1: wartość lower dla interwału na osi y\n
-        :param x2: wartość upper dla interwału na osi x\n
-        :param y2: wartość upper dla interwału na osi y\n
-        :return: nowy obiekt pudełko\n
-        :rtype: box3D
-        '''
-        return box3D(my_closed(x1, x2), my_closed(y1, y2), my_closed(z, z), 0)
 
